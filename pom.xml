@@ -13,7 +13,7 @@
         <artifactId>ScratchAnalytics</artifactId>
         <version>1.0</version>
         <scope>system</scope>
-        <systemPath>C:/Users/obermu07/IdeaProjects/Catnip10/lib/ScratchAnalytics-1.0.jar.lnk</systemPath>
+        <systemPath>${basedir}/lib/ScratchAnalytics-1.0.jar</systemPath>
     </dependency>
 
 </dependencies>
