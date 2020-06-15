@@ -1,0 +1,33 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/libraries/Maven__com_google_auto_value_auto_value_annotations_1_6_3.xml
+/libraries/Maven__com_google_code_findbugs_jsr305_3_0_2.xml
+/libraries/Maven__com_google_errorprone_error_prone_annotations_2_3_2.xml
+/libraries/Maven__com_google_guava_failureaccess_1_0_1.xml
+/libraries/Maven__com_google_guava_guava_28_1_jre.xml
+/libraries/Maven__com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava.xml
+/libraries/Maven__com_google_j2objc_j2objc_annotations_1_3.xml
+/libraries/Maven__com_google_truth_truth_1_0.xml
+/libraries/Maven__com_googlecode_java_diff_utils_diffutils_1_3_0.xml
+/libraries/Maven__commons_cli_commons_cli_1_4.xml
+/libraries/Maven__commons_io_commons_io_2_6.xml
+/libraries/Maven__junit_junit_4_12.xml
+/libraries/Maven__org_apache_commons_commons_csv_1_5.xml
+/libraries/Maven__org_apiguardian_apiguardian_api_1_1_0.xml
+/libraries/Maven__org_checkerframework_checker_compat_qual_2_5_5.xml
+/libraries/Maven__org_checkerframework_checker_qual_2_8_1.xml
+/libraries/Maven__org_codehaus_mojo_animal_sniffer_annotations_1_18.xml
+/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml
+/libraries/Maven__org_junit_jupiter_junit_jupiter_5_5_2.xml
+/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_5_2.xml
+/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_5_2.xml
+/libraries/Maven__org_junit_jupiter_junit_jupiter_params_5_5_2.xml
+/libraries/Maven__org_junit_platform_junit_platform_commons_1_5_2.xml
+/libraries/Maven__org_junit_platform_junit_platform_engine_1_5_2.xml
+/libraries/Maven__org_opentest4j_opentest4j_1_2_0.xml
