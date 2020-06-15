@@ -1,4 +1,4 @@
-package util;
+package pqGram;
 
 import de.uni_passau.fim.se2.litterbox.utils.Preconditions;
 
