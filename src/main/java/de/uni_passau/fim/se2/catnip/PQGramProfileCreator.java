@@ -1,4 +1,4 @@
-package pqGram;
+package de.uni_passau.fim.se2.catnip;
 
 import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;

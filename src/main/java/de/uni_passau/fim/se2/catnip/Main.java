@@ -1,3 +1,5 @@
+package de.uni_passau.fim.se2.catnip;
+
 import org.apache.commons.cli.*;
 
 public class Main {
@@ -21,7 +23,7 @@ public class Main {
         }
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("Catnip", options);
-        System.out.println("Example: " + "java -cp C:\\Catnip1.0.jar Main -path " +
+        System.out.println("Example: " + "java -cp C:\\Catnip1.0.jar de.uni_passau.fim.se2.catnip.Main -path " +
                 "C:\\scratchprojects\\files\\mySolution.sb3 -folder C:\\scratchprojects\\sampleSolutions");
     }
 }
