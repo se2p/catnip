@@ -35,4 +35,9 @@ public class LabelTuple {
     public List<String> getLabels() {
         return labels;
     }
+
+    @Override
+    public String toString() {
+        return labels.toString() ;
+    }
 }
