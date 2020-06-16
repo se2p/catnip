@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class PQGramProfileCreator {
     private static int p = 2;
     private static int q = 3;
-    private static final String NULL_NODE = "*";
+   public static final String NULL_NODE = "*";
 
     public static PQGramProfile createPQProfile(Program program) {
         PQGramProfile profile = new PQGramProfile();
@@ -22,7 +22,8 @@ public abstract class PQGramProfileCreator {
     }
 
     private static PQGramProfile profileStep(PQGramProfile profile, ASTNode root, List<String> anc) {
-        shift(anc,root.getClass().getSimpleName());
+        List<String> ancHere = new ArrayList<>(anc);
+        shift(ancHere,root.getClass().getSimpleName());
         List<String> sib = new ArrayList<>();
         for (int i = 0; i < q; i++) {
             sib.add(NULL_NODE);
@@ -30,17 +31,17 @@ public abstract class PQGramProfileCreator {
 
         List<ASTNode> children = (List<ASTNode>) root.getChildren();
         if (children.size()==0){
-            profile.addLabelTuple(new LabelTuple(anc,sib));
+            profile.addLabelTuple(new LabelTuple(ancHere,sib));
         }else{
 
             for (ASTNode child : children) {
                 shift(sib, child.getClass().getSimpleName());
-                profile.addLabelTuple(new LabelTuple(anc, sib));
-                profile = profileStep(profile, child, anc);
+                profile.addLabelTuple(new LabelTuple(ancHere, sib));
+                profile = profileStep(profile, child, ancHere);
             }
             for (int k = 0; k < q-1; k++) {
                 shift(sib,NULL_NODE);
-                profile.addLabelTuple(new LabelTuple(anc, sib));
+                profile.addLabelTuple(new LabelTuple(ancHere, sib));
             }
         }
         return profile;

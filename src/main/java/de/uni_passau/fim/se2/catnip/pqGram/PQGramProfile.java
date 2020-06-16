@@ -1,20 +1,28 @@
 package de.uni_passau.fim.se2.catnip.pqGram;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import org.apache.commons.collections4.Bag;
+import org.apache.commons.collections4.bag.HashBag;
+
 
 public class PQGramProfile {
-    private Set<LabelTuple> tuples;
+    private Bag<LabelTuple> tuples;
 
     public PQGramProfile() {
-        tuples = new LinkedHashSet<>();
+        tuples = new HashBag<>();
     }
 
     public void addLabelTuple(LabelTuple tuple){
         tuples.add(tuple);
     }
 
-    public Set<LabelTuple> getTuples() {
+    public Bag<LabelTuple> getTuples() {
         return tuples;
+    }
+
+    @Override
+    public String toString() {
+        return "PQGramProfile{" +
+                "tuples=" + tuples +
+                '}';
     }
 }
