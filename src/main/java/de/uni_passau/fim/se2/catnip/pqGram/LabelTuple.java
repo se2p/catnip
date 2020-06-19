@@ -38,6 +38,10 @@ public class LabelTuple {
 
     @Override
     public String toString() {
-        return labels.toString() ;
+        return labels.toString();
+    }
+
+    public boolean containsLabel(String label) {
+        return labels.contains(label);
     }
 }
