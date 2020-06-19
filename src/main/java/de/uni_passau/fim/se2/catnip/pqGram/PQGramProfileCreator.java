@@ -11,13 +11,13 @@ public abstract class PQGramProfileCreator {
     private static int q = 3;
    public static final String NULL_NODE = "*";
 
-    public static PQGramProfile createPQProfile(Program program) {
+    public static PQGramProfile createPQProfile(ASTNode node) {
         PQGramProfile profile = new PQGramProfile();
         List<String> anc = new ArrayList<>();
         for (int i = 0; i < p; i++) {
             anc.add(NULL_NODE);
         }
-        profile = profileStep(profile, program, anc);
+        profile = profileStep(profile, node, anc);
         return profile;
     }
 
