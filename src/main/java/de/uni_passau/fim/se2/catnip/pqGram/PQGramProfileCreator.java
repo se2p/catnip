@@ -1,7 +1,6 @@
 package de.uni_passau.fim.se2.catnip.pqGram;
 
 import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
-import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 
 import java.util.ArrayList;
 import java.util.List;
