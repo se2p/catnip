@@ -8,7 +8,7 @@ import org.javatuples.Pair;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public abstract class PQGramDistance {
+public abstract class PQGramUtil {
 
     public static double calculateDistance(PQGramProfile profile1, PQGramProfile profile2) {
         Bag<LabelTuple> intersection = new HashBag<>(profile1.getTuples());
