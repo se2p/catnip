@@ -39,9 +39,9 @@ public abstract class PQGramUtil {
         Set<LabelTuple> intersection = new LinkedHashSet<>(source.getTuples());
         intersection.retainAll(target.getTuples());
         Set<LabelTuple> extraTuples = new LinkedHashSet<>(source.getTuples());
-        extraTuples.retainAll(intersection);
+        extraTuples.removeAll(intersection);
         Set<LabelTuple> missingTuples = new LinkedHashSet<>(target.getTuples());
-        missingTuples.retainAll(intersection);
+        missingTuples.removeAll(intersection);
 
         for (LabelTuple tuple : missingTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
@@ -51,7 +51,7 @@ public abstract class PQGramUtil {
             }
             for (int i = PQGramProfileCreator.getP(); i < tuple.getLabels().size(); i++) {
                 if (!intersectionContainsLabel(intersection, tuple.getLabels().get(i))) {
-                    edits.addAddition(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()),
+                    edits.addAddition(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()-1),
                             tuple.getLabels().get(i)));
                 }
             }

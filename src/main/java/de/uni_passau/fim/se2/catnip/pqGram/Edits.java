@@ -34,4 +34,12 @@ public class Edits {
     public List<Pair<String,String>> getDeletions() {
         return deletions;
     }
+
+    @Override
+    public String toString() {
+        return "Edits{" +
+                "additions=" + additions +
+                ", deletions=" + deletions +
+                '}';
+    }
 }
