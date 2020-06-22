@@ -1,9 +1,9 @@
 package de.uni_passau.fim.se2.catnip.pgGram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramUtil;
 import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfile;
 import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfileCreator;
+import de.uni_passau.fim.se2.catnip.pqGram.PQGramUtil;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.parser.ProgramParser;
@@ -68,14 +68,6 @@ public class PQGramUtilTest {
     public void testOneBlockEdits() {
         PQGramProfile profile1 = PQGramProfileCreator.createPQProfile(empty);
         PQGramProfile profile2 = PQGramProfileCreator.createPQProfile(oneBlock);
-        Assertions.assertEquals(1, PQGramUtil.identifyEdits(profile1, profile2).getAdditions().size());
-        Assertions.assertEquals(0, PQGramUtil.identifyEdits(profile1, profile2).getDeletions().size());
-    }
-
-    @Test
-    public void testSameBlocksEdits() {
-        PQGramProfile profile1 = PQGramProfileCreator.createPQProfile(sameBlocksSource);
-        PQGramProfile profile2 = PQGramProfileCreator.createPQProfile(sameBlocksTarget);
         Assertions.assertEquals(1, PQGramUtil.identifyEdits(profile1, profile2).getAdditions().size());
         Assertions.assertEquals(0, PQGramUtil.identifyEdits(profile1, profile2).getDeletions().size());
     }
