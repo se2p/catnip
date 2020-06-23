@@ -8,6 +8,7 @@ import de.uni_passau.fim.se2.catnip.pqGram.PQGramUtil;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.model.Script;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +39,6 @@ public class Recommender {
             List<Script> sourceScripts = new ArrayList<>(currentSourceActor.getScripts().getScriptList());
             List<Script> targetScripts =
                     new ArrayList<>(currentTargetActor.getActorDefinition().getScripts().getScriptList());
-            if (sourceScripts.size() == 0 && targetScripts.size() > 0) {
-                //todo add edits for new script
-            }
             for (Script sourceScript : sourceScripts) {
 
                 ScriptWithProfile targetScript = NearestASTNodePicker.pickNearestScript(sourceScript,
@@ -52,6 +50,15 @@ public class Recommender {
                 }
                 targetScripts.remove(targetScript.getScript());
             }
+
+            if (sourceScripts.size() < targetScripts.size()) {
+                Edits edit = new Edits();
+                for (Script targetScript : targetScripts) {
+                    edit.addAddition(new Pair<>("Script", targetScript.getEvent().getClass().getSimpleName()));
+                }
+                edits.add(new ActorScriptEdit(currentSourceActor, null, edit));
+            }
+            //todo if source has more scripts than target
             targetActorDefinitions.remove(currentTargetActor.getActorDefinition());
         }
         return edits;
