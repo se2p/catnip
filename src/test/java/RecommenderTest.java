@@ -4,6 +4,7 @@ import de.uni_passau.fim.se2.catnip.recommendation.ActorScriptEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.Recommender;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
+import de.uni_passau.fim.se2.litterbox.ast.model.event.GreenFlag;
 import de.uni_passau.fim.se2.litterbox.ast.model.statement.actorlook.ClearGraphicEffects;
 import de.uni_passau.fim.se2.litterbox.ast.parser.ProgramParser;
 import org.javatuples.Pair;
@@ -23,6 +24,8 @@ public class RecommenderTest {
     private static Program oneBlockDifferenceTarget;
     private static Program sameBlocksSource;
     private static Program sameBlocksTarget;
+    private static Program empty;
+    private static Program oneScript;
     private static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
@@ -36,6 +39,10 @@ public class RecommenderTest {
         sameBlocksSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/sameBlocksTarget.json");
         sameBlocksTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/emptyProject.json");
+        empty = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/oneScript.json");
+        oneScript = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
@@ -66,7 +73,6 @@ public class RecommenderTest {
         ActorScriptEdit actorEdit = actorEdits.get(0);
         Assertions.assertEquals("Bananas", actorEdit.getActor().getIdent().getName());
         Edits edit = actorEdit.getEdit();
-        System.out.println(actorEdit);
         Assertions.assertEquals(0, edit.getDeletions().size());
         Assertions.assertEquals(1, edit.getAdditions().size());
         Pair<String, String> addition = new Pair<>("StmtList", "ClearGraphicEffects");
@@ -74,4 +80,23 @@ public class RecommenderTest {
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
+
+    @Test
+    public void testOneScriptDifference() {
+        List<Program> targets = new ArrayList<>();
+        targets.add(oneScript);
+        Recommender recommender = new Recommender(empty, targets);
+        List<ActorScriptEdit> actorEdits = recommender.getEdits();
+        Assertions.assertEquals(1, actorEdits.size());
+        ActorScriptEdit actorEdit = actorEdits.get(0);
+        Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
+        Edits edit = actorEdit.getEdit();
+        Assertions.assertEquals(0, edit.getDeletions().size());
+        Assertions.assertEquals(1, edit.getAdditions().size());
+        Pair<String, String> addition = new Pair<>("Script", "GreenFlag");
+        Set<Pair<String, String>> additions = new LinkedHashSet<>();
+        additions.add(addition);
+        Assertions.assertEquals(additions, edit.getAdditions());
+    }
+
 }

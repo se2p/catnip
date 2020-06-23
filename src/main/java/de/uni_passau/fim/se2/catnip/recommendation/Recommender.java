@@ -59,6 +59,8 @@ public class Recommender {
                 edits.add(new ActorScriptEdit(currentSourceActor, null, edit));
             }
             //todo if source has more scripts than target
+
+            //todo procedures
             targetActorDefinitions.remove(currentTargetActor.getActorDefinition());
         }
         return edits;
