@@ -45,12 +45,12 @@ public abstract class PQGramUtil {
 
         for (LabelTuple tuple : missingTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (!intersectionContainsLabel(intersection, tuple.getLabels().get(i))) {
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     edits.addAddition(new Pair<>(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
             }
             for (int i = PQGramProfileCreator.getP(); i < tuple.getLabels().size(); i++) {
-                if (!intersectionContainsLabel(intersection, tuple.getLabels().get(i))) {
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     edits.addAddition(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()-1),
                             tuple.getLabels().get(i)));
                 }
@@ -59,12 +59,12 @@ public abstract class PQGramUtil {
 
         for (LabelTuple tuple : extraTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (!intersectionContainsLabel(intersection, tuple.getLabels().get(i))) {
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     edits.addDeletion(new Pair<>(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
             }
             for (int i = PQGramProfileCreator.getP(); i < tuple.getLabels().size(); i++) {
-                if (!intersectionContainsLabel(intersection, tuple.getLabels().get(i))) {
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     edits.addDeletion(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()),
                             tuple.getLabels().get(i)));
                 }
@@ -74,12 +74,12 @@ public abstract class PQGramUtil {
         return edits;
     }
 
-    private static boolean intersectionContainsLabel(Set<LabelTuple> intersection, String label) {
+    private static boolean intersectionNotContainsLabel(Set<LabelTuple> intersection, String label) {
         for (LabelTuple tuple : intersection) {
             if (tuple.containsLabel(label)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 }
