@@ -2,36 +2,36 @@ package de.uni_passau.fim.se2.catnip.pqGram;
 
 import org.javatuples.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Edits {
-    private List<Pair<String,String>> additions;
-    private List<Pair<String,String>> deletions;
+    private Set<Pair<String, String>> additions;
+    private Set<Pair<String, String>> deletions;
 
     public Edits() {
-        additions = new ArrayList<>();
-        deletions = new ArrayList<>();
+        additions = new LinkedHashSet<>();
+        deletions = new LinkedHashSet<>();
     }
 
-    public Edits(List<Pair<String,String>> additions, List<Pair<String,String>> deletions) {
-        this.additions = new ArrayList<Pair<String,String>>(additions);
-        this.deletions = new ArrayList<Pair<String,String>>(deletions);
+    public Edits(Set<Pair<String, String>> additions, Set<Pair<String, String>> deletions) {
+        this.additions = new LinkedHashSet<>(additions);
+        this.deletions = new LinkedHashSet(deletions);
     }
 
-    public void addAddition(Pair<String,String> tuple) {
+    public void addAddition(Pair<String, String> tuple) {
         additions.add(tuple);
     }
 
-    public void addDeletion(Pair<String,String> tuple) {
+    public void addDeletion(Pair<String, String> tuple) {
         deletions.add(tuple);
     }
 
-    public List<Pair<String,String>> getAdditions() {
+    public Set<Pair<String, String>> getAdditions() {
         return additions;
     }
 
-    public List<Pair<String,String>> getDeletions() {
+    public Set<Pair<String, String>> getDeletions() {
         return deletions;
     }
 
