@@ -17,8 +17,6 @@ import java.io.IOException;
 public class PQGramUtilTest {
     private static Program empty;
     private static Program emptyOtherVariable;
-    private static Program sameBlocksSource;
-    private static Program sameBlocksTarget;
     private static Program oneBlock;
     private static ObjectMapper mapper = new ObjectMapper();
 
@@ -31,10 +29,6 @@ public class PQGramUtilTest {
         emptyOtherVariable = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/oneBlockProject.json");
         oneBlock = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
-        f = new File("./src/test/fixtures/sameBlocksSource.json");
-        sameBlocksSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
-        f = new File("./src/test/fixtures/sameBlocksTarget.json");
-        sameBlocksTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test

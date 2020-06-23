@@ -45,13 +45,13 @@ public abstract class PQGramUtil {
 
         for (LabelTuple tuple : missingTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i)) && !tuple.getLabels().get(i).contains("Metadata")) {
                     edits.addAddition(new Pair<>(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
             }
             for (int i = PQGramProfileCreator.getP(); i < tuple.getLabels().size(); i++) {
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
-                    edits.addAddition(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()-1),
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i)) && !tuple.getLabels().get(i).contains("Metadata")) {
+                    edits.addAddition(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP() - 1),
                             tuple.getLabels().get(i)));
                 }
             }
@@ -59,12 +59,12 @@ public abstract class PQGramUtil {
 
         for (LabelTuple tuple : extraTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i)) && !tuple.getLabels().get(i).contains("Metadata")) {
                     edits.addDeletion(new Pair<>(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
             }
             for (int i = PQGramProfileCreator.getP(); i < tuple.getLabels().size(); i++) {
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
+                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i)) && !tuple.getLabels().get(i).contains("Metadata")) {
                     edits.addDeletion(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()),
                             tuple.getLabels().get(i)));
                 }
