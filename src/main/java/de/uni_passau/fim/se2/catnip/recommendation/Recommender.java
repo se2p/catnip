@@ -27,13 +27,17 @@ public class Recommender {
     public List<ActorScriptEdit> getEdits() {
         List<ActorScriptEdit> edits = new ArrayList<>();
         Program target = NearestASTNodePicker.pickNearestProgram(sourceProgram, possibleTargetPrograms);
-        List<ActorDefinition> sourceActorDefinitions = sourceProgram.getActorDefinitionList().getDefintions();
+        List<ActorDefinition> sourceActorDefinitions =
+                new ArrayList<>(sourceProgram.getActorDefinitionList().getDefintions());
+        List<ActorDefinition> targetActorDefinitions = new ArrayList<>(target.getActorDefinitionList().getDefintions());
+
         for (ActorDefinition currentSourceActor : sourceActorDefinitions) {
             ActorWithProfile currentTargetActor = NearestASTNodePicker.pickNearestActor(currentSourceActor,
-                    target.getActorDefinitionList().getDefintions());
-            System.out.println(currentTargetActor.getActorDefinition().getIdent().getName());
-            List<Script> sourceScripts = currentSourceActor.getScripts().getScriptList();
-            List<Script> targetScripts = currentTargetActor.getActorDefinition().getScripts().getScriptList();
+                    targetActorDefinitions);
+
+            List<Script> sourceScripts = new ArrayList<>(currentSourceActor.getScripts().getScriptList());
+            List<Script> targetScripts =
+                    new ArrayList<>(currentTargetActor.getActorDefinition().getScripts().getScriptList());
             if (sourceScripts.size() == 0 && targetScripts.size() > 0) {
                 //todo add edits for new script
             }
@@ -46,7 +50,9 @@ public class Recommender {
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
                     edits.add(new ActorScriptEdit(currentSourceActor, sourceScript, edit));
                 }
+                targetScripts.remove(targetScript.getScript());
             }
+            targetActorDefinitions.remove(currentTargetActor.getActorDefinition());
         }
         return edits;
     }

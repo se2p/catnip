@@ -31,7 +31,7 @@ public class RecommenderTest {
         List<Program> targets = new ArrayList<>();
         targets.add(oneBlocksTarget);
         Recommender recommender = new Recommender(sameBlocksSource, targets);
-        List<ActorScriptEdit> edits = recommender.getEdits();
-        System.out.println(edits);
+        List<ActorScriptEdit> actorEdits = recommender.getEdits();
+
     }
 }
