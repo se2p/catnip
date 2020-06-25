@@ -1,6 +1,7 @@
 package de.uni_passau.fim.se2.catnip.pgGram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uni_passau.fim.se2.catnip.pqGram.Label;
 import de.uni_passau.fim.se2.catnip.pqGram.LabelTuple;
 import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfile;
 import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfileCreator;
@@ -24,18 +25,18 @@ public class PQGramProfileCreatorTest {
     private static Program emptyOtherVariable;
     private static Program oneBlock;
     private static ObjectMapper mapper = new ObjectMapper();
-    private static List<String> topAnc;
-    private static List<String> topSib;
+    private static List<Label> topAnc;
+    private static List<Label> topSib;
 
     @BeforeAll
     public static void setUp() throws IOException, ParsingException {
         topAnc = new ArrayList<>();
-        topAnc.add(NULL_NODE);
-        topAnc.add(Program.class.getSimpleName());
+        topAnc.add(new Label(NULL_NODE, null));
+        topAnc.add(new Label(Program.class.getSimpleName(), null));
         topSib = new ArrayList<>();
-        topSib.add(NULL_NODE);
-        topSib.add(NULL_NODE);
-        topSib.add(StrId.class.getSimpleName());
+        topSib.add(new Label(NULL_NODE, null));
+        topSib.add(new Label(NULL_NODE, null));
+        topSib.add(new Label(StrId.class.getSimpleName(), null));
         File f = new File("./src/test/fixtures/emptyProject.json");
         empty = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/emptyOtherVariableProject.json");
@@ -47,8 +48,7 @@ public class PQGramProfileCreatorTest {
     @Test
     public void testEmpty() {
         PQGramProfile profile1 = PQGramProfileCreator.createPQProfile(empty);
-        LabelTuple tuple = new LabelTuple(topAnc,topSib);
-        System.out.println(profile1);
+        LabelTuple tuple = new LabelTuple(topAnc, topSib);
         Assertions.assertTrue(profile1.getTuples().contains(tuple));
     }
 }
