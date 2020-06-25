@@ -1,10 +1,7 @@
 package de.uni_passau.fim.se2.catnip.recommendation;
 
 
-import de.uni_passau.fim.se2.catnip.pqGram.Edits;
-import de.uni_passau.fim.se2.catnip.pqGram.NearestASTNodePicker;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfileCreator;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramUtil;
+import de.uni_passau.fim.se2.catnip.pqGram.*;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.model.Script;
@@ -54,7 +51,8 @@ public class Recommender {
             if (sourceScripts.size() < targetScripts.size()) {
                 Edits edit = new Edits();
                 for (Script targetScript : targetScripts) {
-                    edit.addAddition(new Pair<>("Script", targetScript.getEvent().getClass().getSimpleName()));
+                    edit.addAddition(new Pair<>(new Label("Script", null), new Label(
+                            targetScript.getEvent().getClass().getSimpleName(), targetScript.getEvent())));
                 }
                 edits.add(new ActorScriptEdit(currentSourceActor, null, edit));
             }
