@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Objects;
 
 public class LabelTuple {
-    private final List<String> labels;
+    private final List<Label> labels;
 
-    public LabelTuple(List<String> anc, List<String> sib) {
+    public LabelTuple(List<Label> anc, List<Label> sib) {
         Preconditions.checkArgument(anc.size() == PQGramProfileCreator.getP(), "Too many ancestors for the specified " +
                 "p.");
         Preconditions.checkArgument(sib.size() == PQGramProfileCreator.getQ(), "Too many siblings for the specified q" +
                 ".");
-        labels = new ArrayList<String>();
+        labels = new ArrayList<Label>();
         labels.addAll(anc);
         labels.addAll(sib);
     }
@@ -32,7 +32,7 @@ public class LabelTuple {
         return Objects.hash(getLabels());
     }
 
-    public List<String> getLabels() {
+    public List<Label> getLabels() {
         return labels;
     }
 
@@ -42,6 +42,11 @@ public class LabelTuple {
     }
 
     public boolean containsLabel(String label) {
-        return labels.contains(label);
+        for (Label value : labels) {
+            if (value.getLabel().equals(label)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
