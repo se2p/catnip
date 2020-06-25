@@ -58,11 +58,5 @@ public class PQGramUtilTest {
         Assertions.assertTrue(0 < PQGramUtil.calculateDistance(profile1, profile2) && 1 > PQGramUtil.calculateDistance(profile1, profile2));
     }
 
-    @Test
-    public void testOneBlockEdits() {
-        PQGramProfile profile1 = PQGramProfileCreator.createPQProfile(empty);
-        PQGramProfile profile2 = PQGramProfileCreator.createPQProfile(oneBlock);
-        Assertions.assertEquals(1, PQGramUtil.identifyEdits(profile1, profile2).getAdditions().size());
-        Assertions.assertEquals(0, PQGramUtil.identifyEdits(profile1, profile2).getDeletions().size());
-    }
+
 }
