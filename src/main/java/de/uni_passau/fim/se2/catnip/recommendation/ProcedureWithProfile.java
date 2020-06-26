@@ -18,7 +18,7 @@ public class ProcedureWithProfile {
         this.profile = profile;
     }
 
-    public ProcedureDefinition getActorDefinition() {
+    public ProcedureDefinition getProcedureDefinition() {
         return procedureDefinition;
     }
 
