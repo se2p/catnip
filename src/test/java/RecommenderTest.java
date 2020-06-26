@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_passau.fim.se2.catnip.pqGram.Edits;
 import de.uni_passau.fim.se2.catnip.pqGram.Label;
+import de.uni_passau.fim.se2.catnip.recommendation.ActorBlockEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorScriptEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.Recommender;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
@@ -49,9 +50,10 @@ public class RecommenderTest {
         List<Program> targets = new ArrayList<>();
         targets.add(oneBlockDifferenceTarget);
         Recommender recommender = new Recommender(oneBlockDifferenceSource, targets);
-        List<ActorScriptEdit> actorEdits = recommender.getEdits();
+        List<ActorBlockEdit> actorEdits = recommender.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
-        ActorScriptEdit actorEdit = actorEdits.get(0);
+        Assertions.assertTrue(actorEdits.get(0) instanceof ActorScriptEdit);
+        ActorScriptEdit actorEdit = (ActorScriptEdit) actorEdits.get(0);
         Assertions.assertEquals("Bananas", actorEdit.getActor().getIdent().getName());
         Edits edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
@@ -67,9 +69,10 @@ public class RecommenderTest {
         List<Program> targets = new ArrayList<>();
         targets.add(sameBlocksTarget);
         Recommender recommender = new Recommender(sameBlocksSource, targets);
-        List<ActorScriptEdit> actorEdits = recommender.getEdits();
+        List<ActorBlockEdit> actorEdits = recommender.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
-        ActorScriptEdit actorEdit = actorEdits.get(0);
+        Assertions.assertTrue(actorEdits.get(0) instanceof ActorScriptEdit);
+        ActorScriptEdit actorEdit = (ActorScriptEdit) actorEdits.get(0);
         Assertions.assertEquals("Bananas", actorEdit.getActor().getIdent().getName());
         Edits edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
@@ -85,9 +88,9 @@ public class RecommenderTest {
         List<Program> targets = new ArrayList<>();
         targets.add(oneScript);
         Recommender recommender = new Recommender(empty, targets);
-        List<ActorScriptEdit> actorEdits = recommender.getEdits();
+        List<ActorBlockEdit> actorEdits = recommender.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
-        ActorScriptEdit actorEdit = actorEdits.get(0);
+        ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
         Edits edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
