@@ -1,11 +1,10 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_passau.fim.se2.catnip.pqGram.Edits;
+import de.uni_passau.fim.se2.catnip.pqGram.Label;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorScriptEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.Recommender;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
-import de.uni_passau.fim.se2.litterbox.ast.model.event.GreenFlag;
-import de.uni_passau.fim.se2.litterbox.ast.model.statement.actorlook.ClearGraphicEffects;
 import de.uni_passau.fim.se2.litterbox.ast.parser.ProgramParser;
 import org.javatuples.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -57,8 +56,8 @@ public class RecommenderTest {
         Edits edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
         Assertions.assertEquals(1, edit.getAdditions().size());
-        Pair<String, String> addition = new Pair<>("StmtList", "IfOnEdgeBounce");
-        Set<Pair<String, String>> additions = new LinkedHashSet<>();
+        Pair<Label, Label> addition = new Pair<>(new Label("StmtList", null), new Label("IfOnEdgeBounce", null));
+        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
@@ -75,8 +74,8 @@ public class RecommenderTest {
         Edits edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
         Assertions.assertEquals(1, edit.getAdditions().size());
-        Pair<String, String> addition = new Pair<>("StmtList", "ClearGraphicEffects");
-        Set<Pair<String, String>> additions = new LinkedHashSet<>();
+        Pair<Label, Label> addition = new Pair<>(new Label("StmtList", null), new Label("ClearGraphicEffects", null));
+        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
@@ -93,8 +92,8 @@ public class RecommenderTest {
         Edits edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
         Assertions.assertEquals(1, edit.getAdditions().size());
-        Pair<String, String> addition = new Pair<>("Script", "GreenFlag");
-        Set<Pair<String, String>> additions = new LinkedHashSet<>();
+        Pair<Label, Label> addition = new Pair<> (new Label("Script", null), new Label("GreenFlag", null));
+        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
