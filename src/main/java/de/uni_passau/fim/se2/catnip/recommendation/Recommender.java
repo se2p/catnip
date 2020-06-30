@@ -59,7 +59,7 @@ public class Recommender {
             }
             //todo if source has more scripts than target
 
-            //todo procedures
+
             List<ProcedureDefinition> sourceProcedures =
                     new ArrayList<>(currentSourceActor.getProcedureDefinitionList().getList());
             List<ProcedureDefinition> targetProcedures =
@@ -75,6 +75,7 @@ public class Recommender {
                 }
                 targetProcedures.remove(targetProcedure.getProcedureDefinition());
             }
+
 
             targetActorDefinitions.remove(currentTargetActor.getActorDefinition());
         }
