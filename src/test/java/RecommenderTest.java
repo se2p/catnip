@@ -26,6 +26,8 @@ public class RecommenderTest {
     private static Program sameBlocksTarget;
     private static Program empty;
     private static Program oneScript;
+    private static Program oneProcedureSource;
+    private static Program oneProcedureTarget;
     private static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
@@ -43,6 +45,10 @@ public class RecommenderTest {
         empty = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/oneScript.json");
         oneScript = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/oneProcedureSource.json");
+        oneProcedureSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/oneProcedureTarget.json");
+        oneProcedureTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
@@ -100,5 +106,27 @@ public class RecommenderTest {
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
+
+    @Test
+    public void testProcedureDifference() {
+        List<Program> targets = new ArrayList<>();
+        targets.add(oneProcedureTarget);
+        Recommender recommender = new Recommender(oneProcedureSource, targets);
+        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        Assertions.assertEquals(1, actorEdits.size());
+        ActorBlockEdit actorEdit =  actorEdits.get(0);
+        Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
+        Edits edit = actorEdit.getEdit();
+
+        Assertions.assertEquals(0, edit.getDeletions().size());
+        Assertions.assertEquals(2, edit.getAdditions().size());
+        Pair<Label, Label> addition1 = new Pair<> (new Label("TurnRight", null), new Label("NumberLiteral", null));
+        Pair<Label, Label> addition2 = new Pair<> (new Label("StmtList", null), new Label("TurnRight", null));
+        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
+        additions.add(addition1);
+        additions.add(addition2);
+        Assertions.assertEquals(additions, edit.getAdditions());
+    }
+
 
 }
