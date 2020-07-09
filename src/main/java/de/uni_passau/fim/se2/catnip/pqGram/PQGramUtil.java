@@ -65,7 +65,7 @@ public abstract class PQGramUtil {
             }
             for (int i = PQGramProfileCreator.getP(); i < tuple.getLabels().size(); i++) {
                 if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i).getLabel()) && !tuple.getLabels().get(i).getLabel().contains("Metadata")) {
-                    edits.addDeletion(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()),
+                    edits.addDeletion(new Pair<>(tuple.getLabels().get(PQGramProfileCreator.getP()-1),
                             tuple.getLabels().get(i)));
                 }
             }

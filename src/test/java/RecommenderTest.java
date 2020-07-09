@@ -28,6 +28,8 @@ public class RecommenderTest {
     private static Program oneScript;
     private static Program oneProcedureSource;
     private static Program oneProcedureTarget;
+    private static Program tooMuchSource;
+    private static Program tooMuchTarget;
     private static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
@@ -49,6 +51,10 @@ public class RecommenderTest {
         oneProcedureSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/oneProcedureTarget.json");
         oneProcedureTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/tooMuchTarget.json");
+        tooMuchTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/tooMuchSource.json");
+        tooMuchSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
@@ -105,6 +111,25 @@ public class RecommenderTest {
         Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
+    }
+
+    @Test
+    public void testTooMuch() {
+        List<Program> targets = new ArrayList<>();
+        targets.add(tooMuchTarget);
+        Recommender recommender = new Recommender(tooMuchSource, targets);
+        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        Assertions.assertEquals(1, actorEdits.size());
+        ActorBlockEdit actorEdit =  actorEdits.get(0);
+        Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
+        Edits edit = actorEdit.getEdit();
+        Assertions.assertEquals(2, edit.getDeletions().size());
+        Pair<Label, Label> deletion1 = new Pair<> (new Label("StmtList", null), new Label("IfOnEdgeBounce", null));
+        Pair<Label, Label> deletion2 = new Pair<> (new Label("StmtList", null), new Label("NextCostume", null));
+        Set<Pair<Label, Label>> deletions = new LinkedHashSet<>();
+        deletions.add(deletion1);
+        deletions.add(deletion2);
+        Assertions.assertEquals(deletions, edit.getDeletions());
     }
 
     @Test
