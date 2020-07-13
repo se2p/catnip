@@ -1,13 +1,13 @@
 package de.uni_passau.fim.se2.catnip.recommendation;
 
-import de.uni_passau.fim.se2.catnip.pqGram.Edits;
+import de.uni_passau.fim.se2.catnip.pqGram.EditSet;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 
 public class ActorBlockEdit {
     private ActorDefinition actor;
-    private Edits edit;
+    private EditSet edit;
 
-    public ActorBlockEdit(ActorDefinition actor, Edits edit) {
+    public ActorBlockEdit(ActorDefinition actor, EditSet edit) {
         this.actor = actor;
         this.edit = edit;
     }
@@ -16,7 +16,7 @@ public class ActorBlockEdit {
         return actor;
     }
 
-    public Edits getEdit() {
+    public EditSet getEdit() {
         return edit;
     }
 

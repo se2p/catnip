@@ -1,13 +1,13 @@
 package de.uni_passau.fim.se2.catnip.recommendation;
 
-import de.uni_passau.fim.se2.catnip.pqGram.Edits;
+import de.uni_passau.fim.se2.catnip.pqGram.EditSet;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Script;
 
 public class ActorScriptEdit extends ActorBlockEdit {
     private Script script;
 
-    public ActorScriptEdit(ActorDefinition actor, Script script, Edits edit) {
+    public ActorScriptEdit(ActorDefinition actor, Script script, EditSet edit) {
         super(actor, edit);
         this.script = script;
 

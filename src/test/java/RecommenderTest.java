@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni_passau.fim.se2.catnip.pqGram.Edits;
+import de.uni_passau.fim.se2.catnip.pqGram.Edit;
+import de.uni_passau.fim.se2.catnip.pqGram.EditSet;
 import de.uni_passau.fim.se2.catnip.pqGram.Label;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorBlockEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorScriptEdit;
@@ -7,7 +8,6 @@ import de.uni_passau.fim.se2.catnip.recommendation.Recommender;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.parser.ProgramParser;
-import org.javatuples.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -67,12 +67,32 @@ public class RecommenderTest {
         Assertions.assertTrue(actorEdits.get(0) instanceof ActorScriptEdit);
         ActorScriptEdit actorEdit = (ActorScriptEdit) actorEdits.get(0);
         Assertions.assertEquals("Bananas", actorEdit.getActor().getIdent().getName());
-        Edits edit = actorEdit.getEdit();
+        EditSet edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
-        Assertions.assertEquals(1, edit.getAdditions().size());
-        Pair<Label, Label> addition = new Pair<>(new Label("StmtList", null), new Label("IfOnEdgeBounce", null));
-        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
-        additions.add(addition);
+        Assertions.assertEquals(4, edit.getAdditions().size());
+        Edit addition1 = new Edit(new Label("StmtList", null), new Label("IfOnEdgeBounce", null));
+        Label goTo = new Label("GoToPos",null);
+        Label emptyLabel = new Label("*",null);
+        List<Label> left = new ArrayList<>();
+        List<Label> right = new ArrayList<>();
+        right.add(goTo);
+        right.add(emptyLabel);
+        Edit addition2 = new Edit(new Label("StmtList", null), new Label("IfOnEdgeBounce", null),new ArrayList<>(left),new ArrayList<>(right));
+        left = new ArrayList<>();
+        right = new ArrayList<>();
+        left.add(emptyLabel);
+        left.add(emptyLabel);
+        Edit addition3 = new Edit(new Label("StmtList", null), new Label("IfOnEdgeBounce", null),new ArrayList<>(left),new ArrayList<>(right));
+        left = new ArrayList<>();
+        right = new ArrayList<>();
+        left.add(emptyLabel);
+        right.add(goTo);
+        Edit addition4 = new Edit(new Label("StmtList", null), new Label("IfOnEdgeBounce", null),new ArrayList<>(left),new ArrayList<>(right));
+        Set<Edit> additions = new LinkedHashSet<>();
+        additions.add(addition1);
+        additions.add(addition2);
+        additions.add(addition3);
+        additions.add(addition4);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
 
@@ -86,12 +106,32 @@ public class RecommenderTest {
         Assertions.assertTrue(actorEdits.get(0) instanceof ActorScriptEdit);
         ActorScriptEdit actorEdit = (ActorScriptEdit) actorEdits.get(0);
         Assertions.assertEquals("Bananas", actorEdit.getActor().getIdent().getName());
-        Edits edit = actorEdit.getEdit();
+        EditSet edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
-        Assertions.assertEquals(1, edit.getAdditions().size());
-        Pair<Label, Label> addition = new Pair<>(new Label("StmtList", null), new Label("ClearGraphicEffects", null));
-        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
-        additions.add(addition);
+        Assertions.assertEquals(4, edit.getAdditions().size());
+        Label ifOnEdge = new Label("IfOnEdgeBounce",null);
+        Label emptyLabel = new Label("*",null);
+        List<Label> left = new ArrayList<>();
+        List<Label> right = new ArrayList<>();
+        left.add(emptyLabel);
+        left.add(ifOnEdge);
+        Edit addition1 = new Edit(new Label("StmtList", null), new Label("ClearGraphicEffects", null));
+        Edit addition2 = new Edit(new Label("StmtList", null), new Label("ClearGraphicEffects", null),new ArrayList<>(left),new ArrayList<>(right));
+        left = new ArrayList<>();
+        right = new ArrayList<>();
+        right.add(emptyLabel);
+        right.add(emptyLabel);
+        Edit addition3 = new Edit(new Label("StmtList", null), new Label("ClearGraphicEffects", null),new ArrayList<>(left),new ArrayList<>(right));
+        left = new ArrayList<>();
+        right = new ArrayList<>();
+        left.add(ifOnEdge);
+        right.add(emptyLabel);
+        Edit addition4 = new Edit(new Label("StmtList", null), new Label("ClearGraphicEffects", null),new ArrayList<>(left),new ArrayList<>(right));
+        Set<Edit> additions = new LinkedHashSet<>();
+        additions.add(addition1);
+        additions.add(addition2);
+        additions.add(addition3);
+        additions.add(addition4);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
 
@@ -104,11 +144,11 @@ public class RecommenderTest {
         Assertions.assertEquals(1, actorEdits.size());
         ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
-        Edits edit = actorEdit.getEdit();
+        EditSet edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
         Assertions.assertEquals(1, edit.getAdditions().size());
-        Pair<Label, Label> addition = new Pair<> (new Label("Script", null), new Label("GreenFlag", null));
-        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
+        Edit addition = new Edit(new Label("Script", null), new Label("GreenFlag", null));
+        Set<Edit> additions = new LinkedHashSet<>();
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
     }
@@ -122,14 +162,14 @@ public class RecommenderTest {
         Assertions.assertEquals(1, actorEdits.size());
         ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
-        Edits edit = actorEdit.getEdit();
-        Assertions.assertEquals(2, edit.getDeletions().size());
-        Pair<Label, Label> deletion1 = new Pair<> (new Label("StmtList", null), new Label("IfOnEdgeBounce", null));
-        Pair<Label, Label> deletion2 = new Pair<> (new Label("StmtList", null), new Label("NextCostume", null));
-        Set<Pair<Label, Label>> deletions = new LinkedHashSet<>();
+        EditSet edit = actorEdit.getEdit();
+        Assertions.assertEquals(8, edit.getDeletions().size());
+        Edit deletion1 = new Edit(new Label("StmtList", null), new Label("IfOnEdgeBounce", null));
+        Edit deletion2 = new Edit(new Label("StmtList", null), new Label("NextCostume", null));
+        Set<Edit> deletions = new LinkedHashSet<>();
         deletions.add(deletion1);
         deletions.add(deletion2);
-        Assertions.assertEquals(deletions, edit.getDeletions());
+        Assertions.assertTrue(edit.getDeletions().containsAll(deletions));
     }
 
     @Test
@@ -141,16 +181,15 @@ public class RecommenderTest {
         Assertions.assertEquals(1, actorEdits.size());
         ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
-        Edits edit = actorEdit.getEdit();
-
+        EditSet edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
-        Assertions.assertEquals(2, edit.getAdditions().size());
-        Pair<Label, Label> addition1 = new Pair<> (new Label("TurnRight", null), new Label("NumberLiteral", null));
-        Pair<Label, Label> addition2 = new Pair<> (new Label("StmtList", null), new Label("TurnRight", null));
-        Set<Pair<Label, Label>> additions = new LinkedHashSet<>();
+        Assertions.assertEquals(8, edit.getAdditions().size());
+        Edit addition1 = new Edit(new Label("TurnRight", null), new Label("NumberLiteral", null));
+        Edit addition2 = new Edit(new Label("StmtList", null), new Label("TurnRight", null));
+        Set<Edit> additions = new LinkedHashSet<>();
         additions.add(addition1);
         additions.add(addition2);
-        Assertions.assertEquals(additions, edit.getAdditions());
+        Assertions.assertTrue(edit.getAdditions().containsAll(additions));
     }
 
 

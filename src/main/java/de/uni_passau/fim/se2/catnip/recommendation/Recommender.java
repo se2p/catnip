@@ -6,7 +6,6 @@ import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.model.Script;
 import de.uni_passau.fim.se2.litterbox.ast.model.procedure.ProcedureDefinition;
-import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class Recommender {
 
                 ScriptWithProfile targetScript = NearestASTNodePicker.pickNearestScript(sourceScript,
                         targetScripts);
-                Edits edit = PQGramUtil.identifyEdits(PQGramProfileCreator.createPQProfile(sourceScript),
+                EditSet edit = PQGramUtil.identifyEdits(PQGramProfileCreator.createPQProfile(sourceScript),
                         targetScript.getProfile());
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
                     edits.add(new ActorScriptEdit(currentSourceActor, sourceScript, edit));
@@ -50,9 +49,9 @@ public class Recommender {
             }
 
             if (sourceScripts.size() < targetScripts.size()) {
-                Edits edit = new Edits();
+                EditSet edit = new EditSet();
                 for (Script targetScript : targetScripts) {
-                    edit.addAddition(new Pair<>(new Label("Script", null), new Label(
+                    edit.addAddition(new Edit(new Label("Script", null), new Label(
                             targetScript.getEvent().getClass().getSimpleName(), targetScript.getEvent())));
                 }
                 edits.add(new ActorBlockEdit(currentSourceActor, edit));
@@ -68,7 +67,7 @@ public class Recommender {
                 ProcedureWithProfile targetProcedure =
                         NearestASTNodePicker.pickNearestProcedureDefinition(sourceProcedure,
                         targetProcedures);
-                Edits edit = PQGramUtil.identifyEdits(PQGramProfileCreator.createPQProfile(sourceProcedure),
+                EditSet edit = PQGramUtil.identifyEdits(PQGramProfileCreator.createPQProfile(sourceProcedure),
                         targetProcedure.getProfile());
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
                     edits.add(new ActorProcedureEdit(currentSourceActor, sourceProcedure, edit));
