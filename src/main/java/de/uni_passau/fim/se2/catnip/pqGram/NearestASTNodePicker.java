@@ -38,26 +38,31 @@ public abstract class NearestASTNodePicker {
     }
 
     private static ASTNodeWithProfile pickNearestASTNode(ASTNode source, List<? extends ASTNode> targets) {
+        List<ASTNodeWithProfile> targetsWithProfile = new ArrayList<>();
+        for (ASTNode node : targets) {
+            targetsWithProfile.add(new ASTNodeWithProfile(node, PQGramProfileCreator.createPQProfile(node)));
+        }
+        ASTNodeWithProfile sourceWithProfile = new ASTNodeWithProfile(source, PQGramProfileCreator.createPQProfile(source));
+        return pickNearestASTNode(sourceWithProfile,targetsWithProfile);
+    }
+
+    private static ASTNodeWithProfile pickNearestASTNode(ASTNodeWithProfile source, List<? extends ASTNodeWithProfile> targets) {
         double minDistance = 1.0;
-        PQGramProfile sourceProfile = PQGramProfileCreator.createPQProfile(source);
-        List<PQGramProfile> targetProfileList = new ArrayList<>();
-        List<ASTNode> minTargets = new ArrayList<>();
-        for (ASTNode target : targets) {
-            PQGramProfile currentProfile = PQGramProfileCreator.createPQProfile(target);
+        PQGramProfile sourceProfile = source.getProfile();
+        List<ASTNodeWithProfile> minTargets = new ArrayList<>();
+        for (ASTNodeWithProfile target : targets) {
+            PQGramProfile currentProfile = target.getProfile();
             double currentDistance = PQGramUtil.calculateDistance(sourceProfile, currentProfile);
             if (minDistance > currentDistance) {
                 minDistance = currentDistance;
                 minTargets = new ArrayList<>();
-                targetProfileList = new ArrayList<>();
                 minTargets.add(target);
-                targetProfileList.add(currentProfile);
             } else if (minDistance == currentDistance) {
                 minTargets.add(target);
-                targetProfileList.add(currentProfile);
             }
         }
         int index = rand.nextInt(minTargets.size());
-        return new ASTNodeWithProfile(minTargets.get(index), targetProfileList.get(index));
+        return minTargets.get(index);
     }
 
     public static ActorWithProfile pickNearestActor(ActorDefinition source, List<ActorDefinition> targets) {
@@ -66,6 +71,11 @@ public abstract class NearestASTNodePicker {
     }
 
     public static ScriptWithProfile pickNearestScript(Script source, List<Script> targets) {
+        ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
+        return new ScriptWithProfile((Script) astNode.getASTNode(), astNode.getProfile());
+    }
+
+    public static ScriptWithProfile pickNearestScript(ScriptWithProfile source, List<ScriptWithProfile> targets) {
         ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
         return new ScriptWithProfile((Script) astNode.getASTNode(), astNode.getProfile());
     }
