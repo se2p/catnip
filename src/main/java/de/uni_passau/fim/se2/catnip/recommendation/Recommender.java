@@ -1,6 +1,5 @@
 package de.uni_passau.fim.se2.catnip.recommendation;
 
-
 import de.uni_passau.fim.se2.catnip.pqGram.*;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
@@ -36,28 +35,44 @@ public class Recommender {
             List<Script> sourceScripts = new ArrayList<>(currentSourceActor.getScripts().getScriptList());
             List<Script> targetScripts =
                     new ArrayList<>(currentTargetActor.getActorDefinition().getScripts().getScriptList());
-            //todo if source has more scripts than target
-            for (Script sourceScript : sourceScripts) {
 
-                ScriptWithProfile targetScript = NearestASTNodePicker.pickNearestScript(sourceScript,
-                        targetScripts);
-                EditSet edit = PQGramUtil.identifyEdits(PQGramProfileCreator.createPQProfile(sourceScript),
-                        targetScript.getProfile());
-                if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
-                    edits.add(new ActorScriptEdit(currentSourceActor, sourceScript, edit));
-                }
-                targetScripts.remove(targetScript.getScript());
+            List<ScriptWithProfile> sourceScriptsWithProfile = new ArrayList<>();
+            for (Script script : sourceScripts) {
+                sourceScriptsWithProfile.add(new ScriptWithProfile(script));
             }
 
-            if (sourceScripts.size() < targetScripts.size()) {
+            List<ScriptWithProfile> targetScriptsWithProfile = new ArrayList<>();
+            for (Script script : targetScripts) {
+                targetScriptsWithProfile.add(new ScriptWithProfile(script));
+            }
+            //todo if source has more scripts than target
+            /*
+            if (targetScripts.size() < sourceScripts.size()) {
+                List<Script> sourceScripts =
+                for ()
+            }
+
+             */
+            for (ScriptWithProfile sourceScript : sourceScriptsWithProfile) {
+
+                ScriptWithProfile targetScript = NearestASTNodePicker.pickNearestScript(sourceScript,
+                        targetScriptsWithProfile);
+                EditSet edit = PQGramUtil.identifyEdits(sourceScript.getProfile(),
+                        targetScript.getProfile());
+                if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
+                    edits.add(new ActorScriptEdit(currentSourceActor, (Script) sourceScript.getASTNode(), edit));
+                }
+                targetScriptsWithProfile.remove(targetScript);
+            }
+
+            if (sourceScriptsWithProfile.size() < targetScriptsWithProfile.size()) {
                 EditSet edit = new EditSet();
-                for (Script targetScript : targetScripts) {
+                for (ScriptWithProfile targetScript : targetScriptsWithProfile) {
                     edit.addAddition(new Edit(new Label("Script", null), new Label(
-                            targetScript.getEvent().getClass().getSimpleName(), targetScript.getEvent())));
+                            ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(), ((Script) targetScript.getASTNode()).getEvent())));
                 }
                 edits.add(new ActorBlockEdit(currentSourceActor, edit));
             }
-
 
             List<ProcedureDefinition> sourceProcedures =
                     new ArrayList<>(currentSourceActor.getProcedureDefinitionList().getList());
@@ -66,7 +81,7 @@ public class Recommender {
             for (ProcedureDefinition sourceProcedure : sourceProcedures) {
                 ProcedureWithProfile targetProcedure =
                         NearestASTNodePicker.pickNearestProcedureDefinition(sourceProcedure,
-                        targetProcedures);
+                                targetProcedures);
                 EditSet edit = PQGramUtil.identifyEdits(PQGramProfileCreator.createPQProfile(sourceProcedure),
                         targetProcedure.getProfile());
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
@@ -74,7 +89,6 @@ public class Recommender {
                 }
                 targetProcedures.remove(targetProcedure.getProcedureDefinition());
             }
-
 
             targetActorDefinitions.remove(currentTargetActor.getActorDefinition());
         }
