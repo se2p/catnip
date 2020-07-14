@@ -24,9 +24,9 @@ public abstract class NearestASTNodePicker {
             if (minDistance > currentDistance) {
                 minDistance = currentDistance;
                 minTargets = new ArrayList<>();
-                minTargets.add(target.getProgram());
+                minTargets.add((Program) target.getASTNode());
             } else if (minDistance == currentDistance) {
-                minTargets.add(target.getProgram());
+                minTargets.add((Program) target.getASTNode());
             }
         }
 
