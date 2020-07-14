@@ -34,7 +34,7 @@ public class Recommender {
 
             List<Script> sourceScripts = new ArrayList<>(currentSourceActor.getScripts().getScriptList());
             List<Script> targetScripts =
-                    new ArrayList<>(currentTargetActor.getActorDefinition().getScripts().getScriptList());
+                    new ArrayList<>(((ActorDefinition) currentTargetActor.getASTNode()).getScripts().getScriptList());
 
             List<ScriptWithProfile> sourceScriptsWithProfile = new ArrayList<>();
             for (Script script : sourceScripts) {
@@ -77,7 +77,7 @@ public class Recommender {
             List<ProcedureDefinition> sourceProcedures =
                     new ArrayList<>(currentSourceActor.getProcedureDefinitionList().getList());
             List<ProcedureDefinition> targetProcedures =
-                    new ArrayList<>(currentTargetActor.getActorDefinition().getProcedureDefinitionList().getList());
+                    new ArrayList<>(((ActorDefinition) currentTargetActor.getASTNode()).getProcedureDefinitionList().getList());
             for (ProcedureDefinition sourceProcedure : sourceProcedures) {
                 ProcedureWithProfile targetProcedure =
                         NearestASTNodePicker.pickNearestProcedureDefinition(sourceProcedure,
@@ -87,10 +87,10 @@ public class Recommender {
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
                     edits.add(new ActorProcedureEdit(currentSourceActor, sourceProcedure, edit));
                 }
-                targetProcedures.remove(targetProcedure.getProcedureDefinition());
+                targetProcedures.remove((ProcedureDefinition) targetProcedure.getASTNode());
             }
 
-            targetActorDefinitions.remove(currentTargetActor.getActorDefinition());
+            targetActorDefinitions.remove((ActorDefinition) currentTargetActor.getASTNode());
         }
         return edits;
     }
