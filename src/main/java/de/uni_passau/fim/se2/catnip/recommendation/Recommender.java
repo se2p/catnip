@@ -36,6 +36,7 @@ public class Recommender {
             List<Script> sourceScripts = new ArrayList<>(currentSourceActor.getScripts().getScriptList());
             List<Script> targetScripts =
                     new ArrayList<>(currentTargetActor.getActorDefinition().getScripts().getScriptList());
+            //todo if source has more scripts than target
             for (Script sourceScript : sourceScripts) {
 
                 ScriptWithProfile targetScript = NearestASTNodePicker.pickNearestScript(sourceScript,
@@ -56,7 +57,6 @@ public class Recommender {
                 }
                 edits.add(new ActorBlockEdit(currentSourceActor, edit));
             }
-            //todo if source has more scripts than target
 
 
             List<ProcedureDefinition> sourceProcedures =
