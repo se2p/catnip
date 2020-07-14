@@ -28,11 +28,20 @@ public class Recommender {
                 new ArrayList<>(sourceProgram.getActorDefinitionList().getDefintions());
         List<ActorDefinition> targetActorDefinitions = new ArrayList<>(target.getActorDefinitionList().getDefintions());
 
-        for (ActorDefinition currentSourceActor : sourceActorDefinitions) {
-            ActorWithProfile currentTargetActor = NearestASTNodePicker.pickNearestActor(currentSourceActor,
-                    targetActorDefinitions);
+        List<ActorWithProfile> sourceActorDefinitionsWithProfile = new ArrayList<>();
+        for (ActorDefinition actorDefinition : sourceActorDefinitions) {
+            sourceActorDefinitionsWithProfile.add(new ActorWithProfile(actorDefinition));
+        }
+        List<ActorWithProfile> targetActorDefinitionsWithProfile = new ArrayList<>();
+        for (ActorDefinition actorDefinition : targetActorDefinitions) {
+            targetActorDefinitionsWithProfile.add(new ActorWithProfile(actorDefinition));
+        }
 
-            List<Script> sourceScripts = new ArrayList<>(currentSourceActor.getScripts().getScriptList());
+        for (ActorWithProfile currentSourceActor : sourceActorDefinitionsWithProfile) {
+            ActorWithProfile currentTargetActor = NearestASTNodePicker.pickNearestActor(currentSourceActor,
+                    targetActorDefinitionsWithProfile);
+
+            List<Script> sourceScripts = new ArrayList<>(((ActorDefinition) currentSourceActor.getASTNode()).getScripts().getScriptList());
             List<Script> targetScripts =
                     new ArrayList<>(((ActorDefinition) currentTargetActor.getASTNode()).getScripts().getScriptList());
 
@@ -60,7 +69,7 @@ public class Recommender {
                 EditSet edit = PQGramUtil.identifyEdits(sourceScript.getProfile(),
                         targetScript.getProfile());
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
-                    edits.add(new ActorScriptEdit(currentSourceActor, (Script) sourceScript.getASTNode(), edit));
+                    edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), (Script) sourceScript.getASTNode(), edit));
                 }
                 targetScriptsWithProfile.remove(targetScript);
             }
@@ -71,26 +80,38 @@ public class Recommender {
                     edit.addAddition(new Edit(new Label("Script", null), new Label(
                             ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(), ((Script) targetScript.getASTNode()).getEvent())));
                 }
-                edits.add(new ActorBlockEdit(currentSourceActor, edit));
+                edits.add(new ActorBlockEdit((ActorDefinition) currentSourceActor.getASTNode(), edit));
             }
 
             List<ProcedureDefinition> sourceProcedures =
-                    new ArrayList<>(currentSourceActor.getProcedureDefinitionList().getList());
+                    new ArrayList<>(((ActorDefinition)currentSourceActor.getASTNode()).getProcedureDefinitionList().getList());
             List<ProcedureDefinition> targetProcedures =
                     new ArrayList<>(((ActorDefinition) currentTargetActor.getASTNode()).getProcedureDefinitionList().getList());
-            for (ProcedureDefinition sourceProcedure : sourceProcedures) {
-                ProcedureWithProfile targetProcedure =
-                        NearestASTNodePicker.pickNearestProcedureDefinition(sourceProcedure,
-                                targetProcedures);
-                EditSet edit = PQGramUtil.identifyEdits(PQGramProfileCreator.createPQProfile(sourceProcedure),
-                        targetProcedure.getProfile());
-                if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
-                    edits.add(new ActorProcedureEdit(currentSourceActor, sourceProcedure, edit));
-                }
-                targetProcedures.remove((ProcedureDefinition) targetProcedure.getASTNode());
+
+            List<ProcedureWithProfile> sourceProceduresWithProfile =
+                    new ArrayList<>();
+            for (ProcedureDefinition procedure : sourceProcedures) {
+                sourceProceduresWithProfile.add(new ProcedureWithProfile(procedure));
+            }
+            List<ProcedureWithProfile> targetProceduresWithProfile =
+                    new ArrayList<>();
+            for (ProcedureDefinition procedure : targetProcedures) {
+                targetProceduresWithProfile.add(new ProcedureWithProfile(procedure));
             }
 
-            targetActorDefinitions.remove((ActorDefinition) currentTargetActor.getASTNode());
+            for (ProcedureWithProfile sourceProcedure : sourceProceduresWithProfile) {
+                ProcedureWithProfile targetProcedure =
+                        NearestASTNodePicker.pickNearestProcedureDefinition(sourceProcedure,
+                                targetProceduresWithProfile);
+                EditSet edit = PQGramUtil.identifyEdits(sourceProcedure.getProfile(),
+                        targetProcedure.getProfile());
+                if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
+                    edits.add(new ActorProcedureEdit((ActorDefinition) currentSourceActor.getASTNode(), (ProcedureDefinition) sourceProcedure.getASTNode(), edit));
+                }
+                targetProceduresWithProfile.remove(targetProcedure);
+            }
+
+            targetActorDefinitionsWithProfile.remove(currentTargetActor);
         }
         return edits;
     }

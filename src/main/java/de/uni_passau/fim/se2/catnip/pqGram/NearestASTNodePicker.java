@@ -66,6 +66,11 @@ public abstract class NearestASTNodePicker {
         return new ActorWithProfile((ActorDefinition) astNode.getASTNode(), astNode.getProfile());
     }
 
+    public static ActorWithProfile pickNearestActor(ActorWithProfile source, List<ActorWithProfile> targets) {
+        ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
+        return new ActorWithProfile((ActorDefinition) astNode.getASTNode(), astNode.getProfile());
+    }
+
     public static ScriptWithProfile pickNearestScript(Script source, List<Script> targets) {
         ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
         return new ScriptWithProfile((Script) astNode.getASTNode(), astNode.getProfile());
@@ -78,6 +83,12 @@ public abstract class NearestASTNodePicker {
 
     public static ProcedureWithProfile pickNearestProcedureDefinition(ProcedureDefinition source,
                                                                       List<ProcedureDefinition> targets) {
+        ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
+        return new ProcedureWithProfile((ProcedureDefinition) astNode.getASTNode(), astNode.getProfile());
+    }
+
+    public static ProcedureWithProfile pickNearestProcedureDefinition(ProcedureWithProfile source,
+                                                                      List<ProcedureWithProfile> targets) {
         ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
         return new ProcedureWithProfile((ProcedureDefinition) astNode.getASTNode(), astNode.getProfile());
     }
