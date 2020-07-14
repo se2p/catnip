@@ -1,6 +1,7 @@
-package de.uni_passau.fim.se2.catnip.pqGram;
+package de.uni_passau.fim.se2.catnip.recommendation;
 
-import java.util.ArrayList;
+import de.uni_passau.fim.se2.catnip.pqGram.Label;
+
 import java.util.List;
 import java.util.Objects;
 

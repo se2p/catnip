@@ -1,9 +1,5 @@
 package de.uni_passau.fim.se2.catnip.pqGram;
 
-import de.uni_passau.fim.se2.catnip.recommendation.ActorWithProfile;
-import de.uni_passau.fim.se2.catnip.recommendation.ProcedureWithProfile;
-import de.uni_passau.fim.se2.catnip.recommendation.ProgramWithProfile;
-import de.uni_passau.fim.se2.catnip.recommendation.ScriptWithProfile;
 import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
