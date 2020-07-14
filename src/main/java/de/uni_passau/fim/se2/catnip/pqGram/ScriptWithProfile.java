@@ -1,4 +1,4 @@
-package de.uni_passau.fim.se2.catnip.recommendation;
+package de.uni_passau.fim.se2.catnip.pqGram;
 
 import de.uni_passau.fim.se2.catnip.pqGram.ASTNodeWithProfile;
 import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfile;

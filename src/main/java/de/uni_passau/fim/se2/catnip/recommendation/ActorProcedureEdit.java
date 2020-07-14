@@ -1,6 +1,5 @@
 package de.uni_passau.fim.se2.catnip.recommendation;
 
-import de.uni_passau.fim.se2.catnip.pqGram.EditSet;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.procedure.ProcedureDefinition;
 

@@ -1,5 +1,7 @@
 package de.uni_passau.fim.se2.catnip.pqGram;
 
+import de.uni_passau.fim.se2.catnip.recommendation.Edit;
+import de.uni_passau.fim.se2.catnip.recommendation.EditSet;
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
 

@@ -1,4 +1,4 @@
-package de.uni_passau.fim.se2.catnip.pqGram;
+package de.uni_passau.fim.se2.catnip.recommendation;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
