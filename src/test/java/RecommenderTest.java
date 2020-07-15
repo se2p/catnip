@@ -30,6 +30,8 @@ public class RecommenderTest {
     private static Program oneProcedureTarget;
     private static Program tooMuchSource;
     private static Program tooMuchTarget;
+    private static Program tooMuchScriptSource;
+    private static Program tooMuchScriptTarget;
     private static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
@@ -55,6 +57,10 @@ public class RecommenderTest {
         tooMuchTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/tooMuchSource.json");
         tooMuchSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/tooMuchScriptTarget.json");
+        tooMuchScriptTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/tooMuchScriptSource.json");
+        tooMuchScriptSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
@@ -192,5 +198,20 @@ public class RecommenderTest {
         Assertions.assertTrue(edit.getAdditions().containsAll(additions));
     }
 
-
+    @Test
+    public void testTooSourceMuch() {
+        List<Program> targets = new ArrayList<>();
+        targets.add(tooMuchScriptTarget);
+        Recommender recommender = new Recommender(tooMuchScriptSource, targets);
+        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        Assertions.assertEquals(1, actorEdits.size());
+        ActorBlockEdit actorEdit =  actorEdits.get(0);
+        Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
+        EditSet edit = actorEdit.getEdit();
+        Assertions.assertEquals(1, edit.getDeletions().size());
+        Edit deletion1 = new Edit(new Label("Script", null), new Label("GreenFlag", null));
+        Set<Edit> deletions = new LinkedHashSet<>();
+        deletions.add(deletion1);
+        Assertions.assertTrue(edit.getDeletions().containsAll(deletions));
+    }
 }
