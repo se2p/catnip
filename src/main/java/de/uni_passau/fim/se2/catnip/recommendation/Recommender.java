@@ -54,14 +54,24 @@ public class Recommender {
             for (Script script : targetScripts) {
                 targetScriptsWithProfile.add(new ScriptWithProfile(script));
             }
-            //todo if source has more scripts than target
-            /*
-            if (targetScripts.size() < sourceScripts.size()) {
-                List<Script> sourceScripts =
-                for ()
+
+            if (targetScriptsWithProfile.size() < sourceScriptsWithProfile.size()) {
+                List<ScriptWithProfile> sourceScriptsNew = new ArrayList<>(sourceScriptsWithProfile);
+                for (ScriptWithProfile script: targetScriptsWithProfile){
+                    ScriptWithProfile sourceScript = NearestASTNodePicker.pickNearestScript(script,
+                            sourceScriptsNew);
+                    sourceScriptsNew.remove(sourceScript);
+                }
+                assert sourceScriptsNew.size()>0;
+                EditSet edit = new EditSet();
+                for (ScriptWithProfile script : sourceScriptsNew) {
+                    edit.addDeletion(new Edit(new Label("Script", null), new Label(
+                            ((Script) script.getASTNode()).getEvent().getClass().getSimpleName(), ((Script) script.getASTNode()).getEvent())));
+                }
+                edits.add(new ActorBlockEdit((ActorDefinition) currentSourceActor.getASTNode(), edit));
+                sourceScriptsWithProfile.removeAll(sourceScriptsNew);
             }
 
-             */
             for (ScriptWithProfile sourceScript : sourceScriptsWithProfile) {
 
                 ScriptWithProfile targetScript = NearestASTNodePicker.pickNearestScript(sourceScript,
