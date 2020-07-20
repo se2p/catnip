@@ -4,7 +4,7 @@ import de.uni_passau.fim.se2.catnip.recommendation.EditSet;
 import de.uni_passau.fim.se2.catnip.pqGram.Label;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorBlockEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorScriptEdit;
-import de.uni_passau.fim.se2.catnip.recommendation.Recommender;
+import de.uni_passau.fim.se2.catnip.recommendation.EditsGenerator;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.parser.ProgramParser;
@@ -19,7 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class RecommenderTest {
+public class EditsGeneratorTest {
     private static Program oneBlockDifferenceSource;
     private static Program oneBlockDifferenceTarget;
     private static Program sameBlocksSource;
@@ -67,8 +67,8 @@ public class RecommenderTest {
     public void testOneBlockDifference() {
         List<Program> targets = new ArrayList<>();
         targets.add(oneBlockDifferenceTarget);
-        Recommender recommender = new Recommender(oneBlockDifferenceSource, targets);
-        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        EditsGenerator editsGenerator = new EditsGenerator(oneBlockDifferenceSource, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
         Assertions.assertTrue(actorEdits.get(0) instanceof ActorScriptEdit);
         ActorScriptEdit actorEdit = (ActorScriptEdit) actorEdits.get(0);
@@ -106,8 +106,8 @@ public class RecommenderTest {
     public void testSameBlocksDifference() {
         List<Program> targets = new ArrayList<>();
         targets.add(sameBlocksTarget);
-        Recommender recommender = new Recommender(sameBlocksSource, targets);
-        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        EditsGenerator editsGenerator = new EditsGenerator(sameBlocksSource, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
         Assertions.assertTrue(actorEdits.get(0) instanceof ActorScriptEdit);
         ActorScriptEdit actorEdit = (ActorScriptEdit) actorEdits.get(0);
@@ -145,8 +145,8 @@ public class RecommenderTest {
     public void testOneScriptDifference() {
         List<Program> targets = new ArrayList<>();
         targets.add(oneScript);
-        Recommender recommender = new Recommender(empty, targets);
-        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        EditsGenerator editsGenerator = new EditsGenerator(empty, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
         ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
@@ -163,8 +163,8 @@ public class RecommenderTest {
     public void testTooMuch() {
         List<Program> targets = new ArrayList<>();
         targets.add(tooMuchTarget);
-        Recommender recommender = new Recommender(tooMuchSource, targets);
-        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        EditsGenerator editsGenerator = new EditsGenerator(tooMuchSource, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
         ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
@@ -182,8 +182,8 @@ public class RecommenderTest {
     public void testProcedureDifference() {
         List<Program> targets = new ArrayList<>();
         targets.add(oneProcedureTarget);
-        Recommender recommender = new Recommender(oneProcedureSource, targets);
-        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        EditsGenerator editsGenerator = new EditsGenerator(oneProcedureSource, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
         ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
@@ -202,8 +202,8 @@ public class RecommenderTest {
     public void testTooSourceMuch() {
         List<Program> targets = new ArrayList<>();
         targets.add(tooMuchScriptTarget);
-        Recommender recommender = new Recommender(tooMuchScriptSource, targets);
-        List<ActorBlockEdit> actorEdits = recommender.getEdits();
+        EditsGenerator editsGenerator = new EditsGenerator(tooMuchScriptSource, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
         Assertions.assertEquals(1, actorEdits.size());
         ActorBlockEdit actorEdit =  actorEdits.get(0);
         Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
