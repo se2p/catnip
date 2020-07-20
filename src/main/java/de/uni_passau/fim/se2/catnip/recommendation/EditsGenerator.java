@@ -9,11 +9,11 @@ import de.uni_passau.fim.se2.litterbox.ast.model.procedure.ProcedureDefinition;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recommender {
+public class EditsGenerator {
     private Program sourceProgram;
     private List<ProgramWithProfile> possibleTargetPrograms;
 
-    public Recommender(Program sourceProgram, List<Program> possibleTargetPrograms) {
+    public EditsGenerator(Program sourceProgram, List<Program> possibleTargetPrograms) {
         this.sourceProgram = sourceProgram;
         this.possibleTargetPrograms = new ArrayList<>();
         for (Program possibleTargetProgram : possibleTargetPrograms) {
@@ -63,12 +63,13 @@ public class Recommender {
                     sourceScriptsNew.remove(sourceScript);
                 }
                 assert sourceScriptsNew.size()>0;
-                EditSet edit = new EditSet();
                 for (ScriptWithProfile script : sourceScriptsNew) {
+                    EditSet edit = new EditSet();
                     edit.addDeletion(new Edit(new Label("Script", null), new Label(
                             ((Script) script.getASTNode()).getEvent().getClass().getSimpleName(), ((Script) script.getASTNode()).getEvent())));
+                    edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), (Script) script.getASTNode(), edit));
                 }
-                edits.add(new ActorBlockEdit((ActorDefinition) currentSourceActor.getASTNode(), edit));
+
                 sourceScriptsWithProfile.removeAll(sourceScriptsNew);
             }
 
