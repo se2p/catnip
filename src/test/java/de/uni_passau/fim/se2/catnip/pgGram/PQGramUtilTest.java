@@ -1,9 +1,9 @@
 package de.uni_passau.fim.se2.catnip.pgGram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfile;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfileCreator;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramUtil;
+import de.uni_passau.fim.se2.catnip.pq_gram.PQGramProfile;
+import de.uni_passau.fim.se2.catnip.pq_gram.PQGramProfileCreator;
+import de.uni_passau.fim.se2.catnip.pq_gram.PQGramUtil;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.parser.ProgramParser;

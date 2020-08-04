@@ -1,6 +1,6 @@
 package de.uni_passau.fim.se2.catnip.recommendation;
 
-import de.uni_passau.fim.se2.catnip.pqGram.*;
+import de.uni_passau.fim.se2.catnip.pq_gram.*;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.model.Script;

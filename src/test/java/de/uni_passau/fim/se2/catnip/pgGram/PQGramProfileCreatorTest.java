@@ -1,10 +1,10 @@
 package de.uni_passau.fim.se2.catnip.pgGram;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uni_passau.fim.se2.catnip.pqGram.Label;
-import de.uni_passau.fim.se2.catnip.pqGram.LabelTuple;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfile;
-import de.uni_passau.fim.se2.catnip.pqGram.PQGramProfileCreator;
+import de.uni_passau.fim.se2.catnip.pq_gram.Label;
+import de.uni_passau.fim.se2.catnip.pq_gram.LabelTuple;
+import de.uni_passau.fim.se2.catnip.pq_gram.PQGramProfile;
+import de.uni_passau.fim.se2.catnip.pq_gram.PQGramProfileCreator;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.model.identifier.StrId;
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static de.uni_passau.fim.se2.catnip.pqGram.PQGramProfileCreator.NULL_NODE;
+import static de.uni_passau.fim.se2.catnip.pq_gram.PQGramProfileCreator.NULL_NODE;
 
 public class PQGramProfileCreatorTest {
     private static Program empty;
