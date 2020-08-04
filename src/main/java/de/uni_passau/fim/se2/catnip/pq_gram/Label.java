@@ -1,4 +1,4 @@
-package de.uni_passau.fim.se2.catnip.pqGram;
+package de.uni_passau.fim.se2.catnip.pq_gram;
 
 import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
 
@@ -23,8 +23,12 @@ public class Label {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Label label1 = (Label) o;
         return getLabel().equals(label1.getLabel());
     }

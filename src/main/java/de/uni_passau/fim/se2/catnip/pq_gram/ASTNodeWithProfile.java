@@ -1,12 +1,12 @@
-package de.uni_passau.fim.se2.catnip.pqGram;
+package de.uni_passau.fim.se2.catnip.pq_gram;
 
 import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
 
 import java.util.Objects;
 
 public class ASTNodeWithProfile {
-    private ASTNode astNode;
-    private PQGramProfile profile;
+    private final ASTNode astNode;
+    private final PQGramProfile profile;
 
     public ASTNodeWithProfile(ASTNode astNode) {
         this.astNode = astNode;
@@ -28,11 +28,15 @@ public class ASTNodeWithProfile {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ASTNodeWithProfile that = (ASTNodeWithProfile) o;
-        return astNode.equals(that.astNode) &&
-                getProfile().equals(that.getProfile());
+        return astNode.equals(that.astNode)
+                && getProfile().equals(that.getProfile());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.uni_passau.fim.se2.catnip.pqGram;
+package de.uni_passau.fim.se2.catnip.pq_gram;
 
 import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
@@ -38,11 +38,13 @@ public abstract class NearestASTNodePicker {
         for (ASTNode node : targets) {
             targetsWithProfile.add(new ASTNodeWithProfile(node, PQGramProfileCreator.createPQProfile(node)));
         }
-        ASTNodeWithProfile sourceWithProfile = new ASTNodeWithProfile(source, PQGramProfileCreator.createPQProfile(source));
-        return pickNearestASTNode(sourceWithProfile,targetsWithProfile);
+        ASTNodeWithProfile sourceWithProfile = new ASTNodeWithProfile(source,
+                PQGramProfileCreator.createPQProfile(source));
+        return pickNearestASTNode(sourceWithProfile, targetsWithProfile);
     }
 
-    private static ASTNodeWithProfile pickNearestASTNode(ASTNodeWithProfile source, List<? extends ASTNodeWithProfile> targets) {
+    private static ASTNodeWithProfile pickNearestASTNode(ASTNodeWithProfile source,
+                                                         List<? extends ASTNodeWithProfile> targets) {
         double minDistance = 1.0;
         PQGramProfile sourceProfile = source.getProfile();
         List<ASTNodeWithProfile> minTargets = new ArrayList<>();

@@ -1,7 +1,7 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_passau.fim.se2.catnip.recommendation.Edit;
 import de.uni_passau.fim.se2.catnip.recommendation.EditSet;
-import de.uni_passau.fim.se2.catnip.pqGram.Label;
+import de.uni_passau.fim.se2.catnip.pq_gram.Label;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorBlockEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.ActorScriptEdit;
 import de.uni_passau.fim.se2.catnip.recommendation.EditsGenerator;

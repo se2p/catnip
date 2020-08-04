@@ -1,8 +1,7 @@
-package de.uni_passau.fim.se2.catnip.pqGram;
+package de.uni_passau.fim.se2.catnip.pq_gram;
 
 import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.bag.HashBag;
-
 
 public class PQGramProfile {
     private Bag<LabelTuple> tuples;
@@ -11,7 +10,7 @@ public class PQGramProfile {
         tuples = new HashBag<>();
     }
 
-    public void addLabelTuple(LabelTuple tuple){
+    public void addLabelTuple(LabelTuple tuple) {
         tuples.add(tuple);
     }
 
@@ -21,8 +20,7 @@ public class PQGramProfile {
 
     @Override
     public String toString() {
-        return "PQGramProfile{" +
-                "tuples=" + tuples +
-                '}';
+        return "PQGramProfile{"
+                + "tuples=" + tuples + '}';
     }
 }
