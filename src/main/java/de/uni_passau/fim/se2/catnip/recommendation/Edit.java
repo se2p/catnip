@@ -53,23 +53,26 @@ public class Edit {
 
     @Override
     public String toString() {
-        return "Edit{" +
-                "parent=" + parent +
-                ", newNode=" + newNode +
-                ", leftSiblings=" + leftSiblings +
-                ", rightSiblings=" + rightSiblings +
-                '}';
+        return "Edit{"
+                + "parent=" + parent
+                + ", newNode=" + newNode
+                + ", leftSiblings=" + leftSiblings
+                + ", rightSiblings=" + rightSiblings + '}';
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Edit edit = (Edit) o;
-        return parent.equals(edit.parent) &&
-                newNode.equals(edit.newNode) &&
-                Objects.equals(leftSiblings, edit.leftSiblings) &&
-                Objects.equals(rightSiblings, edit.rightSiblings);
+        return parent.equals(edit.parent)
+                && newNode.equals(edit.newNode)
+                && Objects.equals(leftSiblings, edit.leftSiblings)
+                && Objects.equals(rightSiblings, edit.rightSiblings);
     }
 
     @Override

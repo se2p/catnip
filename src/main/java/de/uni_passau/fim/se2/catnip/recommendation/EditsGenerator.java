@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EditsGenerator {
-    private Program sourceProgram;
-    private List<ProgramWithProfile> possibleTargetPrograms;
+    private final Program sourceProgram;
+    private final List<ProgramWithProfile> possibleTargetPrograms;
 
     public EditsGenerator(Program sourceProgram, List<Program> possibleTargetPrograms) {
         this.sourceProgram = sourceProgram;
@@ -41,7 +41,8 @@ public class EditsGenerator {
             ActorWithProfile currentTargetActor = NearestASTNodePicker.pickNearestActor(currentSourceActor,
                     targetActorDefinitionsWithProfile);
 
-            List<Script> sourceScripts = new ArrayList<>(((ActorDefinition) currentSourceActor.getASTNode()).getScripts().getScriptList());
+            List<Script> sourceScripts = new ArrayList<>((
+                    (ActorDefinition) currentSourceActor.getASTNode()).getScripts().getScriptList());
             List<Script> targetScripts =
                     new ArrayList<>(((ActorDefinition) currentTargetActor.getASTNode()).getScripts().getScriptList());
 
@@ -57,17 +58,19 @@ public class EditsGenerator {
 
             if (targetScriptsWithProfile.size() < sourceScriptsWithProfile.size()) {
                 List<ScriptWithProfile> sourceScriptsNew = new ArrayList<>(sourceScriptsWithProfile);
-                for (ScriptWithProfile script: targetScriptsWithProfile){
+                for (ScriptWithProfile script : targetScriptsWithProfile) {
                     ScriptWithProfile sourceScript = NearestASTNodePicker.pickNearestScript(script,
                             sourceScriptsNew);
                     sourceScriptsNew.remove(sourceScript);
                 }
-                assert sourceScriptsNew.size()>0;
+                assert sourceScriptsNew.size() > 0;
                 for (ScriptWithProfile script : sourceScriptsNew) {
                     EditSet edit = new EditSet();
                     edit.addDeletion(new Edit(new Label("Script", null), new Label(
-                            ((Script) script.getASTNode()).getEvent().getClass().getSimpleName(), ((Script) script.getASTNode()).getEvent())));
-                    edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), (Script) script.getASTNode(), edit));
+                            ((Script) script.getASTNode()).getEvent().getClass().getSimpleName(),
+                            ((Script) script.getASTNode()).getEvent())));
+                    edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(),
+                            (Script) script.getASTNode(), edit));
                 }
 
                 sourceScriptsWithProfile.removeAll(sourceScriptsNew);
@@ -80,7 +83,8 @@ public class EditsGenerator {
                 EditSet edit = PQGramUtil.identifyEdits(sourceScript.getProfile(),
                         targetScript.getProfile());
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
-                    edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), (Script) sourceScript.getASTNode(), edit));
+                    edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(),
+                            (Script) sourceScript.getASTNode(), edit));
                 }
                 targetScriptsWithProfile.remove(targetScript);
             }
@@ -89,15 +93,18 @@ public class EditsGenerator {
                 EditSet edit = new EditSet();
                 for (ScriptWithProfile targetScript : targetScriptsWithProfile) {
                     edit.addAddition(new Edit(new Label("Script", null), new Label(
-                            ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(), ((Script) targetScript.getASTNode()).getEvent())));
+                            ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(),
+                            ((Script) targetScript.getASTNode()).getEvent())));
                 }
                 edits.add(new ActorBlockEdit((ActorDefinition) currentSourceActor.getASTNode(), edit));
             }
 
             List<ProcedureDefinition> sourceProcedures =
-                    new ArrayList<>(((ActorDefinition)currentSourceActor.getASTNode()).getProcedureDefinitionList().getList());
+                    new ArrayList<>(((ActorDefinition)
+                            currentSourceActor.getASTNode()).getProcedureDefinitionList().getList());
             List<ProcedureDefinition> targetProcedures =
-                    new ArrayList<>(((ActorDefinition) currentTargetActor.getASTNode()).getProcedureDefinitionList().getList());
+                    new ArrayList<>(((ActorDefinition)
+                            currentTargetActor.getASTNode()).getProcedureDefinitionList().getList());
 
             List<ProcedureWithProfile> sourceProceduresWithProfile =
                     new ArrayList<>();
@@ -117,7 +124,8 @@ public class EditsGenerator {
                 EditSet edit = PQGramUtil.identifyEdits(sourceProcedure.getProfile(),
                         targetProcedure.getProfile());
                 if (edit.getAdditions().size() > 0 || edit.getDeletions().size() > 0) {
-                    edits.add(new ActorProcedureEdit((ActorDefinition) currentSourceActor.getASTNode(), (ProcedureDefinition) sourceProcedure.getASTNode(), edit));
+                    edits.add(new ActorProcedureEdit((ActorDefinition) currentSourceActor.getASTNode(),
+                            (ProcedureDefinition) sourceProcedure.getASTNode(), edit));
                 }
                 targetProceduresWithProfile.remove(targetProcedure);
             }

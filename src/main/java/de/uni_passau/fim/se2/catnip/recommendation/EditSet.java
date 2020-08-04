@@ -4,8 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class EditSet {
-    private Set<Edit> additions;
-    private Set<Edit> deletions;
+    private final Set<Edit> additions;
+    private final Set<Edit> deletions;
 
     public EditSet() {
         additions = new LinkedHashSet<>();
@@ -35,9 +35,8 @@ public class EditSet {
 
     @Override
     public String toString() {
-        return "Edits{" +
-                "additions=" + additions +
-                ", deletions=" + deletions +
-                '}';
+        return "Edits{"
+                + "additions=" + additions
+                + ", deletions=" + deletions + '}';
     }
 }
