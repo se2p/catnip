@@ -99,6 +99,7 @@ public class EditsGeneratorTest {
         additions.add(addition2);
         additions.add(addition3);
         additions.add(addition4);
+        System.out.println(edit.getAdditions());
         Assertions.assertEquals(additions, edit.getAdditions());
     }
 

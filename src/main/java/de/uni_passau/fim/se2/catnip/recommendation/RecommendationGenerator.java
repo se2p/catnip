@@ -3,7 +3,9 @@ package de.uni_passau.fim.se2.catnip.recommendation;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class RecommendationGenerator {
 
@@ -26,10 +28,15 @@ public class RecommendationGenerator {
     }
 
     private List<Recommendation> createProcedureRecommend(ActorProcedureEdit edit) {
+
         return null;
     }
 
     private List<Recommendation> createScriptRecommend(ActorScriptEdit edit) {
+        EditSet allEdits = edit.getEdit();
+        Set<Edit> additions = allEdits.getAdditions();
+        Set<Edit> used = new LinkedHashSet<>();
+
         return null;
     }
 }
