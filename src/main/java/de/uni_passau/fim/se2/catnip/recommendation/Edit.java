@@ -7,18 +7,18 @@ import java.util.Objects;
 
 public class Edit {
     private Label parent;
-    private Label newNode;
+    private Label changeNode;
     private List<Label> leftSiblings;
     private List<Label> rightSiblings;
 
-    public Edit(Label parent, Label newNode) {
+    public Edit(Label parent, Label changeNode) {
         this.parent = parent;
-        this.newNode = newNode;
+        this.changeNode = changeNode;
     }
 
-    public Edit(Label parent, Label newNode, List<Label> leftSiblings, List<Label> rightSiblings) {
+    public Edit(Label parent, Label changeNode, List<Label> leftSiblings, List<Label> rightSiblings) {
         this.parent = parent;
-        this.newNode = newNode;
+        this.changeNode = changeNode;
         this.leftSiblings = leftSiblings;
         this.rightSiblings = rightSiblings;
     }
@@ -27,8 +27,8 @@ public class Edit {
         return parent;
     }
 
-    public Label getNewNode() {
-        return newNode;
+    public Label getChangeNode() {
+        return changeNode;
     }
 
     public List<Label> getLeftSiblings() {
@@ -40,11 +40,11 @@ public class Edit {
     }
 
     public boolean hasLeftSiblings() {
-        return leftSiblings != null;
+        return leftSiblings.size() != 0;
     }
 
     public boolean hasRightSiblings() {
-        return rightSiblings != null;
+        return rightSiblings.size() != 0;
     }
 
     public boolean hasSiblings() {
@@ -55,7 +55,7 @@ public class Edit {
     public String toString() {
         return "Edit{"
                 + "parent=" + parent
-                + ", newNode=" + newNode
+                + ", newNode=" + changeNode
                 + ", leftSiblings=" + leftSiblings
                 + ", rightSiblings=" + rightSiblings + '}';
     }
@@ -70,13 +70,13 @@ public class Edit {
         }
         Edit edit = (Edit) o;
         return parent.equals(edit.parent)
-                && newNode.equals(edit.newNode)
+                && changeNode.equals(edit.changeNode)
                 && Objects.equals(leftSiblings, edit.leftSiblings)
                 && Objects.equals(rightSiblings, edit.rightSiblings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(parent, newNode, leftSiblings, rightSiblings);
+        return Objects.hash(parent, changeNode, leftSiblings, rightSiblings);
     }
 }
