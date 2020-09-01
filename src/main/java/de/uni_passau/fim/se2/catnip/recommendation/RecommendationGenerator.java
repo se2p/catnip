@@ -45,9 +45,11 @@ public class RecommendationGenerator {
             Set<Edit> currentEdits;
             if (!editsPerLabel.containsKey(editNode)) {
                 currentEdits = new LinkedHashSet<>();
+                currentEdits.add(addition);
                 editsPerLabel.put(editNode, currentEdits);
             } else {
                 currentEdits = editsPerLabel.get(editNode);
+                currentEdits.add(addition);
             }
         }
         for (Label label : editsPerLabel.keySet()) {
