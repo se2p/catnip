@@ -56,15 +56,15 @@ public class RecommendationGenerator {
             Set<Edit> currentEdits = editsPerLabel.get(label);
             Set<Edit> usedEdit = new LinkedHashSet<>();
             if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
-                Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ());
-                Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ());
+                Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
+                Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
                 recommendations.add(createScriptAdditionRecommendation(maxLeft.getLeftSiblings(),
                         maxRight.getRightSiblings(), label, edit.getScript(), edit.getActor()));
             } else {
                 //Todo
             }
         }
-        return null;
+        return recommendations;
     }
 
     private Edit getRight(Set<Edit> currentEdits, int maxCount) throws ImpossibleEditException {

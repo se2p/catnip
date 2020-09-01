@@ -1,3 +1,5 @@
+package recommendation;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uni_passau.fim.se2.catnip.recommendation.Edit;
 import de.uni_passau.fim.se2.catnip.recommendation.EditSet;
