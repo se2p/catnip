@@ -1,6 +1,8 @@
 package recommendation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uni_passau.fim.se2.catnip.pq_gram.Label;
+import de.uni_passau.fim.se2.catnip.pq_gram.PQGramProfileCreator;
 import de.uni_passau.fim.se2.catnip.recommendation.ImpossibleEditException;
 import de.uni_passau.fim.se2.catnip.recommendation.Recommendation;
 import de.uni_passau.fim.se2.catnip.recommendation.RecommendationGenerator;
@@ -35,6 +37,19 @@ public class RecommendationGeneratorTest {
         targets.add(oneBlockDifferenceTarget);
         RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
         List<Recommendation> recommendations = recommendationGenerator.generateHints(oneBlockDifferenceSource, targets);
-        Assertions.assertEquals(1,recommendations.size());
+        Assertions.assertEquals(1, recommendations.size());
+        Assertions.assertTrue(recommendations.get(0).isAddition());
+        Assertions.assertFalse(recommendations.get(0).isDeletion());
+        Assertions.assertNull(recommendations.get(0).getProcedure());
+        Assertions.assertEquals("Bananas", recommendations.get(0).getActor().getIdent().getName());
+        Assertions.assertEquals(new Label("IfOnEdgeBounce", null), recommendations.get(0).getAffectedNode());
+        List<Label> prev = new ArrayList<>();
+        prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
+        prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
+        Assertions.assertEquals(prev, recommendations.get(0).getPreviousNodes());
+        List<Label> next = new ArrayList<>();
+        next.add(new Label("GoToPos", null));
+        next.add(new Label(PQGramProfileCreator.NULL_NODE, null));
+        Assertions.assertEquals(next, recommendations.get(0).getFollowingNodes());
     }
 }
