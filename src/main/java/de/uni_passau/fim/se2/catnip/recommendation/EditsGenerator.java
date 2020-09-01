@@ -4,6 +4,7 @@ import de.uni_passau.fim.se2.catnip.pq_gram.*;
 import de.uni_passau.fim.se2.litterbox.ast.model.ActorDefinition;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.model.Script;
+import de.uni_passau.fim.se2.litterbox.ast.model.event.Never;
 import de.uni_passau.fim.se2.litterbox.ast.model.procedure.ProcedureDefinition;
 
 import java.util.ArrayList;
@@ -64,15 +65,20 @@ public class EditsGenerator {
                     sourceScriptsNew.remove(sourceScript);
                 }
                 assert sourceScriptsNew.size() > 0;
+                EditSet edit = new EditSet();
                 for (ScriptWithProfile script : sourceScriptsNew) {
-                    EditSet edit = new EditSet();
-                    edit.addDeletion(new Edit(new Label("Script", null), new Label(
-                            ((Script) script.getASTNode()).getEvent().getClass().getSimpleName(),
-                            ((Script) script.getASTNode()).getEvent())));
+                    if (((Script) script.getASTNode()).getEvent() instanceof Never) {
+                        edit.addDeletion(new Edit(new Label("Script", null), new Label(
+                                ((Script) script.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName(),
+                                ((Script) script.getASTNode()).getStmtList().getStmts().get(0))));
+                    } else {
+                        edit.addDeletion(new Edit(new Label("Script", null), new Label(
+                                ((Script) script.getASTNode()).getEvent().getClass().getSimpleName(),
+                                ((Script) script.getASTNode()).getEvent())));
+                    }
                     edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(),
                             (Script) script.getASTNode(), edit));
                 }
-
                 sourceScriptsWithProfile.removeAll(sourceScriptsNew);
             }
 
@@ -92,9 +98,15 @@ public class EditsGenerator {
             if (sourceScriptsWithProfile.size() < targetScriptsWithProfile.size()) {
                 EditSet edit = new EditSet();
                 for (ScriptWithProfile targetScript : targetScriptsWithProfile) {
-                    edit.addAddition(new Edit(new Label("Script", null), new Label(
-                            ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(),
-                            ((Script) targetScript.getASTNode()).getEvent())));
+                    if (((Script) targetScript.getASTNode()).getEvent() instanceof Never) {
+                        edit.addAddition(new Edit(new Label("Script", null), new Label(
+                                ((Script) targetScript.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName(),
+                                ((Script) targetScript.getASTNode()).getStmtList().getStmts().get(0))));
+                    } else {
+                        edit.addAddition(new Edit(new Label("Script", null), new Label(
+                                ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(),
+                                ((Script) targetScript.getASTNode()).getEvent())));
+                    }
                 }
                 edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), new EmptyScript(), edit));
             }
