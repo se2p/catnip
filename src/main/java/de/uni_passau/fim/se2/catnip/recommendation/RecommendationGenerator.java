@@ -10,6 +10,14 @@ import de.uni_passau.fim.se2.litterbox.ast.model.procedure.ProcedureDefinition;
 import java.util.*;
 
 public class RecommendationGenerator {
+    private List<Label> fullEmpty;
+
+    public RecommendationGenerator() {
+        fullEmpty = new ArrayList<>();
+        for (int i = 0; i < PQGramProfileCreator.getQ() - 1; i++) {
+            fullEmpty.add(new Label(PQGramProfileCreator.NULL_NODE, null));
+        }
+    }
 
     public List<Recommendation> generateHints(Program sourceProgram, List<Program> possibleTargetPrograms)
             throws ImpossibleEditException {
@@ -23,11 +31,12 @@ public class RecommendationGenerator {
     }
 
     private List<Recommendation> createHint(ActorBlockEdit edit) throws ImpossibleEditException {
-        if (edit instanceof ActorScriptEdit) {
-            return createScriptRecommend((ActorScriptEdit) edit);
-        } else {
+        if (edit instanceof ActorProcedureEdit) {
             return createProcedureRecommend((ActorProcedureEdit) edit);
+        } else if (edit instanceof ActorScriptEdit) {
+            return createScriptRecommend((ActorScriptEdit) edit);
         }
+        return null;
     }
 
     private List<Recommendation> createProcedureRecommend(ActorProcedureEdit edit) {
@@ -39,6 +48,43 @@ public class RecommendationGenerator {
         List<Recommendation> recommendations = new ArrayList<>();
         EditSet allEdits = edit.getEdit();
         Set<Edit> additions = allEdits.getAdditions();
+        Map<Label, Set<Edit>> editsPerLabel = getEditsPerLabel(additions);
+        for (Label label : editsPerLabel.keySet()) {
+            Set<Edit> currentEdits = editsPerLabel.get(label);
+            Set<Edit> usedEdit = new LinkedHashSet<>();
+            if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
+                Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
+                Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
+                recommendations.add(createScriptAdditionRecommendation(maxLeft.getLeftSiblings(),
+                        maxRight.getRightSiblings(), label, edit.getScript(), edit.getActor()));
+            } else if (currentEdits.size() == 1) {
+                recommendations.add(createScriptAdditionRecommendation(fullEmpty,
+                        fullEmpty, label, edit.getScript(), edit.getActor()));
+            } else {
+                //TODO
+            }
+        }
+        Set<Edit> deletion = allEdits.getDeletions();
+        editsPerLabel = getEditsPerLabel(deletion);
+        for (Label label : editsPerLabel.keySet()) {
+            Set<Edit> currentEdits = editsPerLabel.get(label);
+            Set<Edit> usedEdit = new LinkedHashSet<>();
+            if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
+                Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
+                Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
+                recommendations.add(createScriptDeletionRecommendation(maxLeft.getLeftSiblings(),
+                        maxRight.getRightSiblings(), label, edit.getScript(), edit.getActor()));
+            } else if (currentEdits.size() == 1) {
+                recommendations.add(createScriptDeletionRecommendation(fullEmpty,
+                        fullEmpty, label, edit.getScript(), edit.getActor()));
+            } else {
+                //TODO
+            }
+        }
+        return recommendations;
+    }
+
+    private Map<Label, Set<Edit>> getEditsPerLabel(Set<Edit> additions) {
         Map<Label, Set<Edit>> editsPerLabel = new LinkedHashMap<>();
         for (Edit addition : additions) {
             Label editNode = addition.getChangeNode();
@@ -52,19 +98,7 @@ public class RecommendationGenerator {
                 currentEdits.add(addition);
             }
         }
-        for (Label label : editsPerLabel.keySet()) {
-            Set<Edit> currentEdits = editsPerLabel.get(label);
-            Set<Edit> usedEdit = new LinkedHashSet<>();
-            if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
-                Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
-                Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
-                recommendations.add(createScriptAdditionRecommendation(maxLeft.getLeftSiblings(),
-                        maxRight.getRightSiblings(), label, edit.getScript(), edit.getActor()));
-            } else {
-                //Todo
-            }
-        }
-        return recommendations;
+        return editsPerLabel;
     }
 
     private Edit getRight(Set<Edit> currentEdits, int maxCount) throws ImpossibleEditException {

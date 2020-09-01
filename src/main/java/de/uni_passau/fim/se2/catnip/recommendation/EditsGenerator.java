@@ -96,7 +96,7 @@ public class EditsGenerator {
                             ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(),
                             ((Script) targetScript.getASTNode()).getEvent())));
                 }
-                edits.add(new ActorBlockEdit((ActorDefinition) currentSourceActor.getASTNode(), edit));
+                edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), new EmptyScript(), edit));
             }
 
             List<ProcedureDefinition> sourceProcedures =

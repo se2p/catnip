@@ -21,6 +21,8 @@ import java.util.List;
 public class RecommendationGeneratorTest {
     private static Program oneBlockDifferenceSource;
     private static Program oneBlockDifferenceTarget;
+    private static Program empty;
+    private static Program oneScript;
     private static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
@@ -29,10 +31,14 @@ public class RecommendationGeneratorTest {
         oneBlockDifferenceSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/oneBlockDifferenceTarget.json");
         oneBlockDifferenceTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/emptyProject.json");
+        empty = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/oneScript.json");
+        oneScript = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
-    public void testOneRecommendation() throws ImpossibleEditException {
+    public void testOneAdditionRecommendation() throws ImpossibleEditException {
         List<Program> targets = new ArrayList<>();
         targets.add(oneBlockDifferenceTarget);
         RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
@@ -51,5 +57,24 @@ public class RecommendationGeneratorTest {
         next.add(new Label("GoToPos", null));
         next.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(next, recommendations.get(0).getFollowingNodes());
+    }
+
+    @Test
+    public void testOneScriptRecommendation() throws ImpossibleEditException {
+        List<Program> targets = new ArrayList<>();
+        targets.add(oneScript);
+        RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
+        List<Recommendation> recommendations = recommendationGenerator.generateHints(empty, targets);
+        Assertions.assertEquals(1, recommendations.size());
+        Assertions.assertTrue(recommendations.get(0).isAddition());
+        Assertions.assertFalse(recommendations.get(0).isDeletion());
+        Assertions.assertNull(recommendations.get(0).getProcedure());
+        Assertions.assertEquals("Figur1", recommendations.get(0).getActor().getIdent().getName());
+        Assertions.assertEquals(new Label("GreenFlag", null), recommendations.get(0).getAffectedNode());
+        List<Label> prev = new ArrayList<>();
+        prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
+        prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
+        Assertions.assertEquals(prev, recommendations.get(0).getPreviousNodes());
+        Assertions.assertEquals(prev, recommendations.get(0).getFollowingNodes());
     }
 }
