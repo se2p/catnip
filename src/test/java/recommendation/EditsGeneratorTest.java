@@ -222,7 +222,7 @@ public class EditsGeneratorTest {
     }
 
     @Test
-    public void testOneScriptDifferenceDead() {
+    public void testOneScriptAdditionDifferenceDead() {
         List<Program> targets = new ArrayList<>();
         targets.add(deadNewScript);
         EditsGenerator editsGenerator = new EditsGenerator(empty, targets);
@@ -237,5 +237,23 @@ public class EditsGeneratorTest {
         Set<Edit> additions = new LinkedHashSet<>();
         additions.add(addition);
         Assertions.assertEquals(additions, edit.getAdditions());
+    }
+
+    @Test
+    public void testOneScriptDeleteDifferenceDead() {
+        List<Program> targets = new ArrayList<>();
+        targets.add(empty);
+        EditsGenerator editsGenerator = new EditsGenerator(deadNewScript, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
+        Assertions.assertEquals(1, actorEdits.size());
+        ActorBlockEdit actorEdit =  actorEdits.get(0);
+        Assertions.assertEquals("Sprite1", actorEdit.getActor().getIdent().getName());
+        EditSet edit = actorEdit.getEdit();
+        Assertions.assertEquals(1, edit.getDeletions().size());
+        Assertions.assertEquals(0, edit.getAdditions().size());
+        Edit addition = new Edit(new Label("Script", null), new Label("TurnRight", null));
+        Set<Edit> deletions = new LinkedHashSet<>();
+        deletions.add(addition);
+        Assertions.assertEquals(deletions, edit.getDeletions());
     }
 }
