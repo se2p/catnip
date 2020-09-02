@@ -63,6 +63,7 @@ public class RecommendationGeneratorTest {
         next.add(new Label("GoToPos", null));
         next.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(next, recommendations.get(0).getFollowingNodes());
+        Assertions.assertEquals(new Label("StmtList",null),recommendations.get(0).getParentNode());
     }
 
     @Test
@@ -82,6 +83,7 @@ public class RecommendationGeneratorTest {
         prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(prev, recommendations.get(0).getPreviousNodes());
         Assertions.assertEquals(prev, recommendations.get(0).getFollowingNodes());
+        Assertions.assertEquals(new Label("Script",null),recommendations.get(0).getParentNode());
     }
 
     @Test
@@ -101,5 +103,6 @@ public class RecommendationGeneratorTest {
         prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(prev, recommendations.get(0).getPreviousNodes());
         Assertions.assertEquals(prev, recommendations.get(0).getFollowingNodes());
+        Assertions.assertEquals(new Label("Script",null),recommendations.get(0).getParentNode());
     }
 }
