@@ -10,6 +10,7 @@ import de.uni_passau.fim.se2.catnip.recommendation.EditsGenerator;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.parser.ProgramParser;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -272,6 +273,25 @@ public class EditsGeneratorTest {
         EditSet edit = actorEdit.getEdit();
         Assertions.assertEquals(0, edit.getDeletions().size());
         Assertions.assertEquals(4, edit.getAdditions().size());
-        System.out.println(edit.getAdditions());
+        Edit addition = new Edit(new Label("TurnRight", null), new Label("Size", null));
+        Set<Edit> additions = new LinkedHashSet<>();
+        additions.add(addition);
+        Label emptyLabel = new Label("*",null);
+        List<Label> left = new ArrayList<>();
+        List<Label> right = new ArrayList<>();
+        left.add(emptyLabel);
+        left.add(emptyLabel);
+        additions.add(new Edit(new Label("TurnRight", null), new Label("Size", null),left,right));
+        left = new ArrayList<>();
+        right = new ArrayList<>();
+        left.add(emptyLabel);
+        right.add(new Label("TopNonDataBlockMetadata",null));
+        additions.add(new Edit(new Label("TurnRight", null), new Label("Size", null),left,right));
+        left = new ArrayList<>();
+        right = new ArrayList<>();
+        right.add(new Label("TopNonDataBlockMetadata",null));
+        right.add(emptyLabel);
+        additions.add(new Edit(new Label("TurnRight", null), new Label("Size", null),left,right));
+        Assert.assertEquals(additions,edit.getAdditions());
     }
 }
