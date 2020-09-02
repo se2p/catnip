@@ -34,6 +34,7 @@ public class EditsGeneratorTest {
     private static Program tooMuchTarget;
     private static Program tooMuchScriptSource;
     private static Program tooMuchScriptTarget;
+    private static Program deadNewScript;
     private static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
@@ -63,6 +64,8 @@ public class EditsGeneratorTest {
         tooMuchScriptTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/tooMuchScriptSource.json");
         tooMuchScriptSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/deadNewScript.json");
+        deadNewScript = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
@@ -216,5 +219,23 @@ public class EditsGeneratorTest {
         Set<Edit> deletions = new LinkedHashSet<>();
         deletions.add(deletion1);
         Assertions.assertTrue(edit.getDeletions().containsAll(deletions));
+    }
+
+    @Test
+    public void testOneScriptDifferenceDead() {
+        List<Program> targets = new ArrayList<>();
+        targets.add(deadNewScript);
+        EditsGenerator editsGenerator = new EditsGenerator(empty, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
+        Assertions.assertEquals(1, actorEdits.size());
+        ActorBlockEdit actorEdit =  actorEdits.get(0);
+        Assertions.assertEquals("Figur1", actorEdit.getActor().getIdent().getName());
+        EditSet edit = actorEdit.getEdit();
+        Assertions.assertEquals(0, edit.getDeletions().size());
+        Assertions.assertEquals(1, edit.getAdditions().size());
+        Edit addition = new Edit(new Label("Script", null), new Label("TurnRight", null));
+        Set<Edit> additions = new LinkedHashSet<>();
+        additions.add(addition);
+        Assertions.assertEquals(additions, edit.getAdditions());
     }
 }
