@@ -35,6 +35,7 @@ public class EditsGeneratorTest {
     private static Program tooMuchScriptSource;
     private static Program tooMuchScriptTarget;
     private static Program deadNewScript;
+    private static Program deadNewScriptWithExp;
     private static ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
@@ -66,6 +67,8 @@ public class EditsGeneratorTest {
         tooMuchScriptSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         f = new File("./src/test/fixtures/deadNewScript.json");
         deadNewScript = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/deadNewScriptWithExp.json");
+        deadNewScriptWithExp = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
@@ -255,5 +258,20 @@ public class EditsGeneratorTest {
         Set<Edit> deletions = new LinkedHashSet<>();
         deletions.add(addition);
         Assertions.assertEquals(deletions, edit.getDeletions());
+    }
+
+    @Test
+    public void testExpressionAddition() {
+        List<Program> targets = new ArrayList<>();
+        targets.add(deadNewScriptWithExp);
+        EditsGenerator editsGenerator = new EditsGenerator(deadNewScript, targets);
+        List<ActorBlockEdit> actorEdits = editsGenerator.getEdits();
+        Assertions.assertEquals(1, actorEdits.size());
+        ActorBlockEdit actorEdit =  actorEdits.get(0);
+        Assertions.assertEquals("Sprite1", actorEdit.getActor().getIdent().getName());
+        EditSet edit = actorEdit.getEdit();
+        Assertions.assertEquals(0, edit.getDeletions().size());
+        Assertions.assertEquals(4, edit.getAdditions().size());
+        System.out.println(edit.getAdditions());
     }
 }

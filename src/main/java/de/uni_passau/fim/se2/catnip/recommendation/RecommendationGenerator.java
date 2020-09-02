@@ -55,11 +55,15 @@ public class RecommendationGenerator {
             if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
                 Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
                 Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
+                Set<Label> parents = getParents(currentEdits);
+                assert (parents.size() == 1);
                 recommendations.add(createScriptAdditionRecommendation(maxLeft.getLeftSiblings(),
-                        maxRight.getRightSiblings(), label, edit.getScript(), edit.getActor()));
+                        maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
             } else if (currentEdits.size() == 1) {
+                Set<Label> parents = getParents(currentEdits);
+                assert (parents.size() == 1);
                 recommendations.add(createScriptAdditionRecommendation(fullEmpty,
-                        fullEmpty, label, edit.getScript(), edit.getActor()));
+                        fullEmpty, label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
             } else {
                 //TODO
             }
@@ -72,11 +76,15 @@ public class RecommendationGenerator {
             if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
                 Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
                 Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
+                Set<Label> parents = getParents(currentEdits);
+                assert (parents.size() == 1);
                 recommendations.add(createScriptDeletionRecommendation(maxLeft.getLeftSiblings(),
-                        maxRight.getRightSiblings(), label, edit.getScript(), edit.getActor()));
+                        maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
             } else if (currentEdits.size() == 1) {
+                Set<Label> parents = getParents(currentEdits);
+                assert (parents.size() == 1);
                 recommendations.add(createScriptDeletionRecommendation(fullEmpty,
-                        fullEmpty, label, edit.getScript(), edit.getActor()));
+                        fullEmpty, label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
             } else {
                 //TODO
             }
@@ -101,6 +109,14 @@ public class RecommendationGenerator {
         return editsPerLabel;
     }
 
+    private Set<Label> getParents(Set<Edit> currentEdits) {
+        Set<Label> parents = new LinkedHashSet<>();
+        for (Edit edit : currentEdits) {
+            parents.add(edit.getParent());
+        }
+        return parents;
+    }
+
     private Edit getRight(Set<Edit> currentEdits, int maxCount) throws ImpossibleEditException {
         for (Edit edit : currentEdits) {
             if (edit.hasSiblings() && edit.getRightSiblings().size() == maxCount) {
@@ -120,26 +136,26 @@ public class RecommendationGenerator {
     }
 
     private Recommendation createScriptAdditionRecommendation(List<Label> leftSiblings, List<Label> rightSiblings,
-                                                              Label affectedNode, Script script,
+                                                              Label affectedNode, Label parentNode, Script script,
                                                               ActorDefinition actor) {
-        return new Recommendation(leftSiblings, rightSiblings, affectedNode, false, true, script, null, actor);
+        return new Recommendation(leftSiblings, rightSiblings, affectedNode, parentNode, false, true, script, null, actor);
     }
 
     private Recommendation createScriptDeletionRecommendation(List<Label> leftSiblings, List<Label> rightSiblings,
-                                                              Label affectedNode, Script script,
+                                                              Label affectedNode, Label parentNode, Script script,
                                                               ActorDefinition actor) {
-        return new Recommendation(leftSiblings, rightSiblings, affectedNode, true, false, script, null, actor);
+        return new Recommendation(leftSiblings, rightSiblings, affectedNode, parentNode, true, false, script, null, actor);
     }
 
     private Recommendation createProcedureDeletionRecommendation(List<Label> leftSiblings, List<Label> rightSiblings,
-                                                                 Label affectedNode, ProcedureDefinition procedure,
+                                                                 Label affectedNode, Label parentNode, ProcedureDefinition procedure,
                                                                  ActorDefinition actor) {
-        return new Recommendation(leftSiblings, rightSiblings, affectedNode, true, false, null, procedure, actor);
+        return new Recommendation(leftSiblings, rightSiblings, affectedNode, parentNode, true, false, null, procedure, actor);
     }
 
     private Recommendation createProcedureAdditionRecommendation(List<Label> leftSiblings, List<Label> rightSiblings,
-                                                                 Label affectedNode, ProcedureDefinition procedure,
+                                                                 Label affectedNode, Label parentNode, ProcedureDefinition procedure,
                                                                  ActorDefinition actor) {
-        return new Recommendation(leftSiblings, rightSiblings, affectedNode, false, true, null, procedure, actor);
+        return new Recommendation(leftSiblings, rightSiblings, affectedNode, parentNode, false, true, null, procedure, actor);
     }
 }

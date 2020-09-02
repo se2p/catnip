@@ -11,18 +11,20 @@ public class Recommendation {
     private final List<Label> previousNodes;
     private final List<Label> followingNodes;
     private final Label affectedNode;
+    private final Label parentNode;
     private final boolean deletion;
     private final boolean addition;
     private final Script script;
     private final ProcedureDefinition procedure;
     private final ActorDefinition actor;
 
-    public Recommendation(List<Label> previousNodes, List<Label> followingNodes, Label affectedNode, boolean deletion,
+    public Recommendation(List<Label> previousNodes, List<Label> followingNodes, Label affectedNode, Label parentNode, boolean deletion,
                           boolean addition, Script script, ProcedureDefinition procedure, ActorDefinition actor) {
         assert (deletion && !addition) || (!deletion && addition);
         assert (procedure == null && script != null) || (procedure != null && script == null);
         this.previousNodes = previousNodes;
         this.followingNodes = followingNodes;
+        this.parentNode = parentNode;
         this.affectedNode = affectedNode;
         this.deletion = deletion;
         this.addition = addition;
@@ -61,5 +63,9 @@ public class Recommendation {
 
     public ActorDefinition getActor() {
         return actor;
+    }
+
+    public Label getParentNode() {
+        return parentNode;
     }
 }
