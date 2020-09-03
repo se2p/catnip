@@ -45,50 +45,39 @@ public class RecommendationGenerator {
     }
 
     private List<Recommendation> createScriptRecommend(ActorScriptEdit edit) throws ImpossibleEditException {
-        List<Recommendation> recommendations = new ArrayList<>();
         EditSet allEdits = edit.getEdit();
         Set<Edit> additions = allEdits.getAdditions();
-        Map<Label, Set<Edit>> editsPerLabel = getEditsPerLabel(additions);
+        List<Recommendation> recommendations = new ArrayList<>(generateRecommendations(additions, edit.getScript(), edit.getActor(), true));
+        Set<Edit> deletions = allEdits.getDeletions();
+        recommendations.addAll(generateRecommendations(deletions, edit.getScript(), edit.getActor(), false));
+        return recommendations;
+    }
+
+    private List<Recommendation> generateRecommendations(Set<Edit> edits, Script script, ActorDefinition actor, boolean isAddition) throws ImpossibleEditException {
+        List<Recommendation> recommendations = new ArrayList<>();
+        Map<Label, Set<Edit>> editsPerLabel = getEditsPerLabel(edits);
         for (Label label : editsPerLabel.keySet()) {
             Set<Edit> currentEdits = new LinkedHashSet<>(editsPerLabel.get(label));
             if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
-                recommendations.add(generateRecommendForSingleBlock(currentEdits, label, edit.getScript(), edit.getActor(), true));
+                recommendations.add(generateRecommendForSingleBlock(currentEdits, label, script, actor, isAddition));
             } else if (currentEdits.size() == 1) {
                 Set<Label> parents = getParents(currentEdits);
                 assert (parents.size() == 1);
-                recommendations.add(createScriptAdditionRecommendation(fullEmpty,
-                        fullEmpty, label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
-            } else {
-                Set<Label> parents = getParents(currentEdits);
-                for (Label parent : parents) {
-                    Set<Edit> editsWithSameParent = getEditsFromParent(parent, currentEdits);
-                    if (editsWithSameParent.size() == PQGramProfileCreator.getQ() + 1) {
-                        recommendations.add(generateRecommendForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), true));
-                    } else {
-                        recommendations.addAll(generateMultipleRecommendationsForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), true));
-                    }
+                if (isAddition) {
+                    recommendations.add(createScriptAdditionRecommendation(fullEmpty,
+                            fullEmpty, label, (Label) parents.toArray()[0], script, actor));
+                } else {
+                    recommendations.add(createScriptDeletionRecommendation(fullEmpty,
+                            fullEmpty, label, (Label) parents.toArray()[0], script, actor));
                 }
-            }
-        }
-        Set<Edit> deletion = allEdits.getDeletions();
-        editsPerLabel = getEditsPerLabel(deletion);
-        for (Label label : editsPerLabel.keySet()) {
-            Set<Edit> currentEdits = editsPerLabel.get(label);
-            if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
-                recommendations.add(generateRecommendForSingleBlock(currentEdits, label, edit.getScript(), edit.getActor(), false));
-            } else if (currentEdits.size() == 1) {
-                Set<Label> parents = getParents(currentEdits);
-                assert (parents.size() == 1);
-                recommendations.add(createScriptDeletionRecommendation(fullEmpty,
-                        fullEmpty, label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
             } else {
                 Set<Label> parents = getParents(currentEdits);
                 for (Label parent : parents) {
                     Set<Edit> editsWithSameParent = getEditsFromParent(parent, currentEdits);
                     if (editsWithSameParent.size() == PQGramProfileCreator.getQ() + 1) {
-                        recommendations.add(generateRecommendForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), false));
+                        recommendations.add(generateRecommendForSingleBlock(editsWithSameParent, label, script, actor, isAddition));
                     } else {
-                        recommendations.addAll(generateMultipleRecommendationsForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), false));
+                        recommendations.addAll(generateMultipleRecommendationsForSingleBlock(editsWithSameParent, label, script, actor, isAddition));
                     }
                 }
             }
