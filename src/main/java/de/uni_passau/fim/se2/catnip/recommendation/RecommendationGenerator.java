@@ -39,9 +39,13 @@ public class RecommendationGenerator {
         return null;
     }
 
-    private List<Recommendation> createProcedureRecommend(ActorProcedureEdit edit) {
-
-        return null;
+    private List<Recommendation> createProcedureRecommend(ActorProcedureEdit edit) throws ImpossibleEditException {
+        EditSet allEdits = edit.getEdit();
+        Set<Edit> additions = allEdits.getAdditions();
+        List<Recommendation> recommendations = new ArrayList<>(generateRecommendations(additions, edit.getProcedure(), edit.getActor(), true));
+        Set<Edit> deletions = allEdits.getDeletions();
+        recommendations.addAll(generateRecommendations(deletions, edit.getProcedure(), edit.getActor(), false));
+        return recommendations;
     }
 
     private List<Recommendation> createScriptRecommend(ActorScriptEdit edit) throws ImpossibleEditException {
@@ -85,7 +89,45 @@ public class RecommendationGenerator {
         return recommendations;
     }
 
+    private List<Recommendation> generateRecommendations(Set<Edit> edits, ProcedureDefinition procedure, ActorDefinition actor, boolean isAddition) throws ImpossibleEditException {
+        List<Recommendation> recommendations = new ArrayList<>();
+        Map<Label, Set<Edit>> editsPerLabel = getEditsPerLabel(edits);
+        for (Label label : editsPerLabel.keySet()) {
+            Set<Edit> currentEdits = new LinkedHashSet<>(editsPerLabel.get(label));
+            if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
+                recommendations.add(generateRecommendForSingleBlock(currentEdits, label, procedure, actor, isAddition));
+            } else if (currentEdits.size() == 1) {
+                Set<Label> parents = getParents(currentEdits);
+                assert (parents.size() == 1);
+                if (isAddition) {
+                    recommendations.add(createProcedureAdditionRecommendation(fullEmpty,
+                            fullEmpty, label, (Label) parents.toArray()[0], procedure, actor));
+                } else {
+                    recommendations.add(createProcedureDeletionRecommendation(fullEmpty,
+                            fullEmpty, label, (Label) parents.toArray()[0], procedure, actor));
+                }
+            } else {
+                Set<Label> parents = getParents(currentEdits);
+                for (Label parent : parents) {
+                    Set<Edit> editsWithSameParent = getEditsFromParent(parent, currentEdits);
+                    if (editsWithSameParent.size() == PQGramProfileCreator.getQ() + 1) {
+                        recommendations.add(generateRecommendForSingleBlock(editsWithSameParent, label, procedure, actor, isAddition));
+                    } else {
+                        recommendations.addAll(generateMultipleRecommendationsForSingleBlock(editsWithSameParent, label, procedure, actor, isAddition));
+                    }
+                }
+            }
+        }
+        return recommendations;
+    }
+
     private List<Recommendation> generateMultipleRecommendationsForSingleBlock(Set<Edit> editsWithSameParent, Label label, Script script, ActorDefinition actor, boolean isAddition) {
+        List<Recommendation> recommendations = new ArrayList<>();
+        // TODO: 03.09.2020
+        return recommendations;
+    }
+
+    private List<Recommendation> generateMultipleRecommendationsForSingleBlock(Set<Edit> editsWithSameParent, Label label, ProcedureDefinition procedure, ActorDefinition actor, boolean isAddition) {
         List<Recommendation> recommendations = new ArrayList<>();
         // TODO: 03.09.2020
         return recommendations;
@@ -113,6 +155,20 @@ public class RecommendationGenerator {
         } else {
             return createScriptDeletionRecommendation(maxLeft.getLeftSiblings(),
                     maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], script, actor);
+        }
+    }
+
+    private Recommendation generateRecommendForSingleBlock(Set<Edit> currentEdits, Label label, ProcedureDefinition procedure, ActorDefinition actor, boolean isAddition) throws ImpossibleEditException {
+        Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
+        Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
+        Set<Label> parents = getParents(currentEdits);
+        assert (parents.size() == 1);
+        if (isAddition) {
+            return createProcedureAdditionRecommendation(maxLeft.getLeftSiblings(),
+                    maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], procedure, actor);
+        } else {
+            return createProcedureDeletionRecommendation(maxLeft.getLeftSiblings(),
+                    maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], procedure, actor);
         }
     }
 
