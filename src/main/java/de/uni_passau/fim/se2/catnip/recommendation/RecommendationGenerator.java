@@ -50,46 +50,81 @@ public class RecommendationGenerator {
         Set<Edit> additions = allEdits.getAdditions();
         Map<Label, Set<Edit>> editsPerLabel = getEditsPerLabel(additions);
         for (Label label : editsPerLabel.keySet()) {
-            Set<Edit> currentEdits = editsPerLabel.get(label);
-            Set<Edit> usedEdit = new LinkedHashSet<>();
+            Set<Edit> currentEdits = new LinkedHashSet<>(editsPerLabel.get(label));
             if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
-                Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
-                Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
-                Set<Label> parents = getParents(currentEdits);
-                assert (parents.size() == 1);
-                recommendations.add(createScriptAdditionRecommendation(maxLeft.getLeftSiblings(),
-                        maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
+                recommendations.add(generateRecommendForSingleBlock(currentEdits, label, edit.getScript(), edit.getActor(), true));
             } else if (currentEdits.size() == 1) {
                 Set<Label> parents = getParents(currentEdits);
                 assert (parents.size() == 1);
                 recommendations.add(createScriptAdditionRecommendation(fullEmpty,
                         fullEmpty, label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
             } else {
-                //TODO
+                Set<Label> parents = getParents(currentEdits);
+                for (Label parent : parents) {
+                    Set<Edit> editsWithSameParent = getEditsFromParent(parent, currentEdits);
+                    if (editsWithSameParent.size() == PQGramProfileCreator.getQ() + 1) {
+                        recommendations.add(generateRecommendForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), true));
+                    } else {
+                        recommendations.addAll(generateMultipleRecommendationsForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), true));
+                    }
+                }
             }
         }
         Set<Edit> deletion = allEdits.getDeletions();
         editsPerLabel = getEditsPerLabel(deletion);
         for (Label label : editsPerLabel.keySet()) {
             Set<Edit> currentEdits = editsPerLabel.get(label);
-            Set<Edit> usedEdit = new LinkedHashSet<>();
             if (currentEdits.size() == PQGramProfileCreator.getQ() + 1) {
-                Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
-                Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
-                Set<Label> parents = getParents(currentEdits);
-                assert (parents.size() == 1);
-                recommendations.add(createScriptDeletionRecommendation(maxLeft.getLeftSiblings(),
-                        maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
+                recommendations.add(generateRecommendForSingleBlock(currentEdits, label, edit.getScript(), edit.getActor(), false));
             } else if (currentEdits.size() == 1) {
                 Set<Label> parents = getParents(currentEdits);
                 assert (parents.size() == 1);
                 recommendations.add(createScriptDeletionRecommendation(fullEmpty,
                         fullEmpty, label, (Label) parents.toArray()[0], edit.getScript(), edit.getActor()));
             } else {
-                //TODO
+                Set<Label> parents = getParents(currentEdits);
+                for (Label parent : parents) {
+                    Set<Edit> editsWithSameParent = getEditsFromParent(parent, currentEdits);
+                    if (editsWithSameParent.size() == PQGramProfileCreator.getQ() + 1) {
+                        recommendations.add(generateRecommendForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), false));
+                    } else {
+                        recommendations.addAll(generateMultipleRecommendationsForSingleBlock(editsWithSameParent, label, edit.getScript(), edit.getActor(), false));
+                    }
+                }
             }
         }
         return recommendations;
+    }
+
+    private List<Recommendation> generateMultipleRecommendationsForSingleBlock(Set<Edit> editsWithSameParent, Label label, Script script, ActorDefinition actor, boolean isAddition) {
+        List<Recommendation> recommendations = new ArrayList<>();
+        // TODO: 03.09.2020
+        return recommendations;
+    }
+
+    private Set<Edit> getEditsFromParent(Label parent, Set<Edit> currentEdits) {
+        Set<Edit> edits = new LinkedHashSet<>();
+        for (Edit current : currentEdits) {
+            if (current.getParent().equals(parent)) {
+                edits.add(current);
+                currentEdits.remove(current);
+            }
+        }
+        return edits;
+    }
+
+    private Recommendation generateRecommendForSingleBlock(Set<Edit> currentEdits, Label label, Script script, ActorDefinition actor, boolean isAddition) throws ImpossibleEditException {
+        Edit maxLeft = getLeft(currentEdits, PQGramProfileCreator.getQ() - 1);
+        Edit maxRight = getRight(currentEdits, PQGramProfileCreator.getQ() - 1);
+        Set<Label> parents = getParents(currentEdits);
+        assert (parents.size() == 1);
+        if (isAddition) {
+            return createScriptAdditionRecommendation(maxLeft.getLeftSiblings(),
+                    maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], script, actor);
+        } else {
+            return createScriptDeletionRecommendation(maxLeft.getLeftSiblings(),
+                    maxRight.getRightSiblings(), label, (Label) parents.toArray()[0], script, actor);
+        }
     }
 
     private Map<Label, Set<Edit>> getEditsPerLabel(Set<Edit> additions) {
