@@ -121,9 +121,41 @@ public class RecommendationGenerator {
         return recommendations;
     }
 
-    private List<Recommendation> generateMultipleRecommendationsForSingleBlock(Set<Edit> editsWithSameParent, Label label, Script script, ActorDefinition actor, boolean isAddition) {
+    private List<Recommendation> generateMultipleRecommendationsForSingleBlock(Set<Edit> editsWithSameParent, Label label, Script script, ActorDefinition actor, boolean isAddition) throws ImpossibleEditException {
         List<Recommendation> recommendations = new ArrayList<>();
-        // TODO: 03.09.2020
+        Set<Edit> usedEdits = new LinkedHashSet<>();
+        int maxCount = PQGramProfileCreator.getQ() - 1;
+        while (usedEdits.size() != editsWithSameParent.size()) {
+            Set<Edit> currentEditSet = new LinkedHashSet<>();
+            List<Label> lastLeft = new ArrayList<>();
+            List<Label> lastRight = new ArrayList<>();
+            for (int i = 0; i < PQGramProfileCreator.getQ(); i++) {
+                Edit underReview = null;
+                for (Edit currentEdit : editsWithSameParent) {
+                    if (currentEdit.getLeftSiblings() == null && currentEdit.getRightSiblings() == null) {
+                        usedEdits.add(currentEdit);
+                    } else if (currentEdit.getLeftSiblings().size() == maxCount - i && currentEdit.getRightSiblings().size() == i) {
+                        if (currentEdit.getLeftSiblings().size() == maxCount) {
+                            underReview = currentEdit;
+                            if (!usedEdits.contains(currentEdit)) {
+                                usedEdits.add(underReview);
+                                break;
+                            }
+                        } else if (currentEdit.getLeftSiblings().equals(lastLeft.subList(i, lastLeft.size())) && currentEdit.getRightSiblings().subList(0, i).equals(lastRight)) {
+                            underReview = currentEdit;
+                            if (!usedEdits.contains(currentEdit)) {
+                                usedEdits.add(underReview);
+                                break;
+                            }
+                        }
+                    }
+                }
+                lastLeft = underReview.getLeftSiblings();
+                lastRight = underReview.getRightSiblings();
+                currentEditSet.add(underReview);
+            }
+            recommendations.add(generateRecommendForSingleBlock(currentEditSet, label, script, actor, isAddition));
+        }
         return recommendations;
     }
 
