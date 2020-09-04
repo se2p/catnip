@@ -137,21 +137,23 @@ public class RecommendationGenerator {
                     } else if (currentEdit.getLeftSiblings().size() == maxCount - i && currentEdit.getRightSiblings().size() == i) {
                         if (currentEdit.getLeftSiblings().size() == maxCount) {
                             underReview = currentEdit;
+                            lastLeft = underReview.getLeftSiblings();
                             if (!usedEdits.contains(currentEdit)) {
                                 usedEdits.add(underReview);
                                 break;
                             }
-                        } else if (currentEdit.getLeftSiblings().equals(lastLeft.subList(i, lastLeft.size())) && currentEdit.getRightSiblings().subList(0, i).equals(lastRight)) {
-                            underReview = currentEdit;
-                            if (!usedEdits.contains(currentEdit)) {
-                                usedEdits.add(underReview);
-                                break;
+                        } else if (currentEdit.getLeftSiblings().equals(lastLeft.subList(i, lastLeft.size()))) {
+                            if (i <= 1 || (currentEdit.getRightSiblings().subList(0, i-1).equals(lastRight))) {
+                                underReview = currentEdit;
+                                lastRight = underReview.getRightSiblings();
+                                if (!usedEdits.contains(currentEdit)) {
+                                    usedEdits.add(underReview);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-                lastLeft = underReview.getLeftSiblings();
-                lastRight = underReview.getRightSiblings();
                 currentEditSet.add(underReview);
             }
             recommendations.add(generateRecommendForSingleBlock(currentEditSet, label, script, actor, isAddition));
@@ -170,7 +172,7 @@ public class RecommendationGenerator {
         for (Edit current : currentEdits) {
             if (current.getParent().equals(parent)) {
                 edits.add(current);
-                currentEdits.remove(current);
+                //currentEdits.remove(current);
             }
         }
         return edits;
