@@ -126,45 +126,55 @@ public class RecommendationGenerator {
         Set<Edit> usedEdits = new LinkedHashSet<>();
         int maxCount = PQGramProfileCreator.getQ() - 1;
         while (usedEdits.size() != editsWithSameParent.size()) {
-            Set<Edit> currentEditSet = new LinkedHashSet<>();
-            List<Label> lastLeft = new ArrayList<>();
-            List<Label> lastRight = new ArrayList<>();
-            for (int i = 0; i < PQGramProfileCreator.getQ(); i++) {
-                Edit underReview = null;
-                for (Edit currentEdit : editsWithSameParent) {
-                    if (currentEdit.getLeftSiblings() == null && currentEdit.getRightSiblings() == null) {
-                        usedEdits.add(currentEdit);
-                    } else if (currentEdit.getLeftSiblings().size() == maxCount - i && currentEdit.getRightSiblings().size() == i) {
-                        if (currentEdit.getLeftSiblings().size() == maxCount) {
-                            underReview = currentEdit;
-                            lastLeft = underReview.getLeftSiblings();
-                            if (!usedEdits.contains(currentEdit)) {
-                                usedEdits.add(underReview);
-                                break;
-                            }
-                        } else if (currentEdit.getLeftSiblings().equals(lastLeft.subList(i, lastLeft.size()))) {
-                            if (i <= 1 || (currentEdit.getRightSiblings().subList(0, i-1).equals(lastRight))) {
-                                underReview = currentEdit;
-                                lastRight = underReview.getRightSiblings();
-                                if (!usedEdits.contains(currentEdit)) {
-                                    usedEdits.add(underReview);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                currentEditSet.add(underReview);
-            }
+            Set<Edit> currentEditSet = generateCurrentEditSet(editsWithSameParent, usedEdits, maxCount);
             recommendations.add(generateRecommendForSingleBlock(currentEditSet, label, script, actor, isAddition));
         }
         return recommendations;
     }
 
-    private List<Recommendation> generateMultipleRecommendationsForSingleBlock(Set<Edit> editsWithSameParent, Label label, ProcedureDefinition procedure, ActorDefinition actor, boolean isAddition) {
+    private List<Recommendation> generateMultipleRecommendationsForSingleBlock(Set<Edit> editsWithSameParent, Label label, ProcedureDefinition procedure, ActorDefinition actor, boolean isAddition) throws ImpossibleEditException {
         List<Recommendation> recommendations = new ArrayList<>();
-        // TODO: 03.09.2020
+        Set<Edit> usedEdits = new LinkedHashSet<>();
+        int maxCount = PQGramProfileCreator.getQ() - 1;
+        while (usedEdits.size() != editsWithSameParent.size()) {
+            Set<Edit> currentEditSet = generateCurrentEditSet(editsWithSameParent, usedEdits, maxCount);
+            recommendations.add(generateRecommendForSingleBlock(currentEditSet, label, procedure, actor, isAddition));
+        }
         return recommendations;
+    }
+
+    private Set<Edit> generateCurrentEditSet(Set<Edit> editsWithSameParent, Set<Edit> usedEdits, int maxCount) {
+        Set<Edit> currentEditSet = new LinkedHashSet<>();
+        List<Label> lastLeft = new ArrayList<>();
+        List<Label> lastRight = new ArrayList<>();
+        for (int i = 0; i < PQGramProfileCreator.getQ(); i++) {
+            Edit underReview = null;
+            for (Edit currentEdit : editsWithSameParent) {
+                if (currentEdit.getLeftSiblings() == null && currentEdit.getRightSiblings() == null) {
+                    usedEdits.add(currentEdit);
+                } else if (currentEdit.getLeftSiblings().size() == maxCount - i && currentEdit.getRightSiblings().size() == i) {
+                    if (currentEdit.getLeftSiblings().size() == maxCount) {
+                        underReview = currentEdit;
+                        lastLeft = underReview.getLeftSiblings();
+                        if (!usedEdits.contains(currentEdit)) {
+                            usedEdits.add(underReview);
+                            break;
+                        }
+                    } else if (currentEdit.getLeftSiblings().equals(lastLeft.subList(i, lastLeft.size()))) {
+                        if (i <= 1 || (currentEdit.getRightSiblings().subList(0, i - 1).equals(lastRight))) {
+                            underReview = currentEdit;
+                            lastRight = underReview.getRightSiblings();
+                            if (!usedEdits.contains(currentEdit)) {
+                                usedEdits.add(underReview);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            currentEditSet.add(underReview);
+        }
+        return currentEditSet;
     }
 
     private Set<Edit> getEditsFromParent(Label parent, Set<Edit> currentEdits) {
