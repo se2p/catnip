@@ -2,6 +2,7 @@ package de.uni_passau.fim.se2.catnip.pq_gram;
 
 import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
 import de.uni_passau.fim.se2.litterbox.ast.model.expression.Expression;
+import de.uni_passau.fim.se2.litterbox.ast.model.identifier.Identifier;
 import de.uni_passau.fim.se2.litterbox.ast.model.statement.Stmt;
 
 import java.util.ArrayList;
@@ -29,7 +30,8 @@ public abstract class PQGramProfileCreator {
 
     private static String getBlockName(ASTNode node) {
         String blockName;
-        if ((node instanceof Stmt || node instanceof Expression) && !node.getClass().getSimpleName().contains("Literal") && !node.getClass().getSimpleName().contains("StrId")) {
+        if ((node instanceof Stmt || node instanceof Expression) && !node.getClass().getSimpleName().contains("Literal")
+                && !(node instanceof Identifier)) {
             String currentBlock = node.getClass().getSimpleName();
             if (countPerLabel.containsKey(currentBlock)) {
                 int count = countPerLabel.get(currentBlock) + 1;
