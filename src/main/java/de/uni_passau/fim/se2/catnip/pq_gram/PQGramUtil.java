@@ -38,17 +38,19 @@ public abstract class PQGramUtil {
 
     public static EditSet identifyEdits(PQGramProfile source, PQGramProfile target) {
         EditSet editSet = new EditSet();
-        Set<LabelTuple> intersection = new LinkedHashSet<>(source.getTuples());
-        intersection.retainAll(target.getTuples());
+        Set<LabelTuple> intersectionBasedOnTarget = new LinkedHashSet<>(target.getTuples());
+        intersectionBasedOnTarget.retainAll(source.getTuples());
+        Set<LabelTuple> intersectionBasedOnSource = new LinkedHashSet<>(source.getTuples());
+        intersectionBasedOnSource.retainAll(target.getTuples());
         Set<LabelTuple> extraTuples = new LinkedHashSet<>(source.getTuples());
-        extraTuples.removeAll(intersection);
+        extraTuples.removeAll(intersectionBasedOnSource);
         Set<LabelTuple> missingTuples = new LinkedHashSet<>(target.getTuples());
-        missingTuples.removeAll(intersection);
+        missingTuples.removeAll(intersectionBasedOnTarget);
 
         for (LabelTuple tuple : missingTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i).getLabel())
-                        && !tuple.getLabels().get(i).getLabel().contains("Metadata")) {
+                if (intersectionNotContainsLabel(intersectionBasedOnTarget, tuple.getLabels().get(i))
+                        && !tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal")) {
                     editSet.addAddition(new Edit(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
             }
@@ -61,8 +63,8 @@ public abstract class PQGramUtil {
                     current = rightSiblings.get(0);
                     rightSiblings.remove(0);
                 }
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i).getLabel())
-                        && !tuple.getLabels().get(i).getLabel().contains("Metadata")) {
+                if (intersectionNotContainsLabel(intersectionBasedOnTarget, tuple.getLabels().get(i))
+                        && !tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal")) {
                     editSet.addAddition(new Edit(tuple.getLabels().get(PQGramProfileCreator.getP() - 1),
                             tuple.getLabels().get(i), new ArrayList<>(leftSiblings), new ArrayList<>(rightSiblings)));
                 }
@@ -74,7 +76,7 @@ public abstract class PQGramUtil {
 
         for (LabelTuple tuple : extraTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i).getLabel())
+                if (intersectionNotContainsLabel(intersectionBasedOnSource, tuple.getLabels().get(i))
                         && !tuple.getLabels().get(i).getLabel().contains("Metadata")) {
                     editSet.addDeletion(new Edit(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
@@ -88,7 +90,7 @@ public abstract class PQGramUtil {
                     current = rightSiblings.get(0);
                     rightSiblings.remove(0);
                 }
-                if (intersectionNotContainsLabel(intersection, tuple.getLabels().get(i).getLabel())
+                if (intersectionNotContainsLabel(intersectionBasedOnSource, tuple.getLabels().get(i))
                         && !tuple.getLabels().get(i).getLabel().contains("Metadata")) {
                     editSet.addDeletion(new Edit(tuple.getLabels().get(PQGramProfileCreator.getP() - 1),
                             tuple.getLabels().get(i), new ArrayList<>(leftSiblings), new ArrayList<>(rightSiblings)));
@@ -102,7 +104,7 @@ public abstract class PQGramUtil {
         return editSet;
     }
 
-    private static boolean intersectionNotContainsLabel(Set<LabelTuple> intersection, String label) {
+    private static boolean intersectionNotContainsLabel(Set<LabelTuple> intersection, Label label) {
         for (LabelTuple tuple : intersection) {
             if (tuple.containsLabel(label)) {
                 return false;
