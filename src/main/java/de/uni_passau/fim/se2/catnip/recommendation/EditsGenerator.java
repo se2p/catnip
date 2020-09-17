@@ -26,8 +26,8 @@ public class EditsGenerator {
         List<ActorBlockEdit> edits = new ArrayList<>();
         Program target = NearestASTNodePicker.pickNearestProgram(sourceProgram, possibleTargetPrograms);
         List<ActorDefinition> sourceActorDefinitions =
-                new ArrayList<>(sourceProgram.getActorDefinitionList().getDefintions());
-        List<ActorDefinition> targetActorDefinitions = new ArrayList<>(target.getActorDefinitionList().getDefintions());
+                new ArrayList<>(sourceProgram.getActorDefinitionList().getDefinitions());
+        List<ActorDefinition> targetActorDefinitions = new ArrayList<>(target.getActorDefinitionList().getDefinitions());
 
         List<ActorWithProfile> sourceActorDefinitionsWithProfile = new ArrayList<>();
         for (ActorDefinition actorDefinition : sourceActorDefinitions) {
