@@ -22,14 +22,12 @@ import static de.uni_passau.fim.se2.catnip.pq_gram.PQGramProfileCreator.NULL_NOD
 
 public class PQGramProfileCreatorTest {
     private static Program empty;
-    private static Program emptyOtherVariable;
-    private static Program oneBlock;
-    private static ObjectMapper mapper = new ObjectMapper();
     private static List<Label> topAnc;
     private static List<Label> topSib;
 
     @BeforeAll
     public static void setUp() throws IOException, ParsingException {
+        ObjectMapper mapper = new ObjectMapper();
         topAnc = new ArrayList<>();
         topAnc.add(new Label(NULL_NODE, null));
         topAnc.add(new Label(Program.class.getSimpleName(), null));
@@ -39,10 +37,6 @@ public class PQGramProfileCreatorTest {
         topSib.add(new Label(StrId.class.getSimpleName(), null));
         File f = new File("./src/test/fixtures/emptyProject.json");
         empty = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
-        f = new File("./src/test/fixtures/emptyOtherVariableProject.json");
-        emptyOtherVariable = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
-        f = new File("./src/test/fixtures/oneBlockProject.json");
-        oneBlock = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test

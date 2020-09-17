@@ -16,19 +16,12 @@ import java.io.IOException;
 
 public class PQGramUtilTest {
     private static Program empty;
-    private static Program emptyOtherVariable;
-    private static Program oneBlock;
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @BeforeAll
     public static void setUp() throws IOException, ParsingException {
-
         File f = new File("./src/test/fixtures/emptyProject.json");
         empty = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
-        f = new File("./src/test/fixtures/emptyOtherVariableProject.json");
-        emptyOtherVariable = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
-        f = new File("./src/test/fixtures/oneBlockProject.json");
-        oneBlock = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
     }
 
     @Test
@@ -45,18 +38,20 @@ public class PQGramUtilTest {
     }
 
     @Test
-    public void testOtherVariableProgram() {
+    public void testOtherVariableProgram() throws IOException, ParsingException {
+        File f = new File("./src/test/fixtures/emptyOtherVariableProject.json");
+        Program emptyOtherVariable = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         PQGramProfile profile1 = PQGramProfileCreator.createPQProfile(empty);
         PQGramProfile profile2 = PQGramProfileCreator.createPQProfile(emptyOtherVariable);
         Assertions.assertEquals(0, PQGramUtil.calculateDistance(profile1, profile2));
     }
 
     @Test
-    public void testOneBlockProgram() {
+    public void testOneBlockProgram() throws IOException, ParsingException {
+        File f = new File("./src/test/fixtures/oneBlockProject.json");
+        Program oneBlock = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
         PQGramProfile profile1 = PQGramProfileCreator.createPQProfile(empty);
         PQGramProfile profile2 = PQGramProfileCreator.createPQProfile(oneBlock);
         Assertions.assertTrue(0 < PQGramUtil.calculateDistance(profile1, profile2) && 1 > PQGramUtil.calculateDistance(profile1, profile2));
     }
-
-
 }
