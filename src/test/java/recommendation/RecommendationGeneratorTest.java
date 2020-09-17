@@ -35,13 +35,13 @@ public class RecommendationGeneratorTest {
         Assertions.assertFalse(recommendations.get(0).isDeletion());
         Assertions.assertNull(recommendations.get(0).getProcedure());
         Assertions.assertEquals("Bananas", recommendations.get(0).getActor().getIdent().getName());
-        Assertions.assertEquals(new Label("IfOnEdgeBounce", null), recommendations.get(0).getAffectedNode());
+        Assertions.assertEquals(new Label("IfOnEdgeBounce0", null), recommendations.get(0).getAffectedNode());
         List<Label> prev = new ArrayList<>();
         prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         prev.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(prev, recommendations.get(0).getPreviousNodes());
         List<Label> next = new ArrayList<>();
-        next.add(new Label("GoToPos", null));
+        next.add(new Label("GoToPos0", null));
         next.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(next, recommendations.get(0).getFollowingNodes());
         Assertions.assertEquals(new Label("StmtList", null), recommendations.get(0).getParentNode());
@@ -105,15 +105,11 @@ public class RecommendationGeneratorTest {
         targets.add(oneProcedureTarget);
         RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
         List<Recommendation> recommendations = recommendationGenerator.generateHints(oneProcedureSource, targets);
-        Assertions.assertEquals(2, recommendations.size());
+        Assertions.assertEquals(1, recommendations.size());
         Assertions.assertTrue(recommendations.get(0).isAddition());
         Assertions.assertFalse(recommendations.get(0).isDeletion());
         Assertions.assertNull(recommendations.get(0).getScript());
-        Assertions.assertTrue(recommendations.get(1).isAddition());
-        Assertions.assertFalse(recommendations.get(1).isDeletion());
-        Assertions.assertNull(recommendations.get(1).getScript());
-        Assertions.assertEquals(new Label("NumberLiteral", null), recommendations.get(0).getAffectedNode());
-        Assertions.assertEquals(new Label("TurnRight", null), recommendations.get(1).getAffectedNode());
+        Assertions.assertEquals(new Label("TurnRight0", null), recommendations.get(0).getAffectedNode());
     }
 
     @Test
@@ -133,20 +129,63 @@ public class RecommendationGeneratorTest {
         Assertions.assertTrue(recommendations.get(1).isAddition());
         Assertions.assertFalse(recommendations.get(1).isDeletion());
         Assertions.assertNull(recommendations.get(1).getProcedure());
-        Assertions.assertEquals(new Label("IfOnEdgeBounce", null), recommendations.get(0).getAffectedNode());
+        Assertions.assertEquals(new Label("IfOnEdgeBounce1", null), recommendations.get(0).getAffectedNode());
         List<Label> after = new ArrayList<>();
         after.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         after.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(after, recommendations.get(0).getFollowingNodes());
         List<Label> middle = new ArrayList<>();
-        middle.add(new Label("StopAllSounds", null));
-        middle.add(new Label("ClearSoundEffects", null));
+        middle.add(new Label("StopAllSounds0", null));
+        middle.add(new Label("ClearSoundEffects0", null));
         Assertions.assertEquals(middle, recommendations.get(0).getPreviousNodes());
-        Assertions.assertEquals(new Label("IfOnEdgeBounce", null), recommendations.get(1).getAffectedNode());
+        Assertions.assertEquals(new Label("IfOnEdgeBounce0", null), recommendations.get(1).getAffectedNode());
         Assertions.assertEquals(middle, recommendations.get(1).getFollowingNodes());
         List<Label> prev = new ArrayList<>();
-        prev.add(new Label("SayForSecs", null));
-        prev.add(new Label("Think", null));
+        prev.add(new Label("SayForSecs0", null));
+        prev.add(new Label("Think0", null));
         Assertions.assertEquals(prev, recommendations.get(1).getPreviousNodes());
+    }
+
+    @Test
+    public void testRecommendationWithMultipleTargets() throws ImpossibleEditException, IOException, ParsingException {
+        File f = new File("./src/test/fixtures/farTargetProgram.json");
+        Program farTargetProgram = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/nearTargetProgram.json");
+        Program nearTargetProgram = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/middleTargetProgram.json");
+        Program middleTargetProgram = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/sourceProgram.json");
+        Program sourceProgram = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        List<Program> targets = new ArrayList<>();
+        targets.add(nearTargetProgram);
+        targets.add(farTargetProgram);
+        RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
+        List<Recommendation> recommendations = recommendationGenerator.generateHints(sourceProgram, targets);
+        Assertions.assertEquals(1, recommendations.size());
+        Assertions.assertTrue(recommendations.get(0).isDeletion());
+        Assertions.assertEquals(new Label("IfOnEdgeBounce0", null), recommendations.get(0).getAffectedNode());
+        targets = new ArrayList<>();
+        targets.add(middleTargetProgram);
+        targets.add(farTargetProgram);
+        recommendations = recommendationGenerator.generateHints(sourceProgram, targets);
+        Assertions.assertEquals(2, recommendations.size());
+        Assertions.assertFalse(recommendations.get(0).isDeletion());
+        Assertions.assertTrue(recommendations.get(1).isDeletion());
+        Assertions.assertEquals(new Label("IfOnEdgeBounce0", null), recommendations.get(1).getAffectedNode());
+        Assertions.assertEquals(new Label("GoToPosXY0", null), recommendations.get(0).getAffectedNode());
+    }
+
+    @Test
+    public void testRecommendationAddingSame() throws ImpossibleEditException, IOException, ParsingException {
+        File f = new File("./src/test/fixtures/addSameTarget.json");
+        Program addSameTarget = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        f = new File("./src/test/fixtures/addSameSource.json");
+        Program addSameSource = ProgramParser.parseProgram(f.getName(), mapper.readTree(f));
+        List<Program> targets = new ArrayList<>();
+        targets.add(addSameTarget);
+        RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
+        List<Recommendation> recommendations = recommendationGenerator.generateHints(addSameSource, targets);
+        Assertions.assertEquals(1, recommendations.size());
+        Assertions.assertTrue(recommendations.get(0).isAddition());
     }
 }

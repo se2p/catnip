@@ -69,7 +69,7 @@ public class EditsGenerator {
                 for (ScriptWithProfile script : sourceScriptsNew) {
                     if (((Script) script.getASTNode()).getEvent() instanceof Never) {
                         edit.addDeletion(new Edit(new Label("Script", null), new Label(
-                                ((Script) script.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName(),
+                                ((Script) script.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName() + 0,
                                 ((Script) script.getASTNode()).getStmtList().getStmts().get(0))));
                     } else {
                         edit.addDeletion(new Edit(new Label("Script", null), new Label(
@@ -100,7 +100,7 @@ public class EditsGenerator {
                 for (ScriptWithProfile targetScript : targetScriptsWithProfile) {
                     if (((Script) targetScript.getASTNode()).getEvent() instanceof Never) {
                         edit.addAddition(new Edit(new Label("Script", null), new Label(
-                                ((Script) targetScript.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName(),
+                                ((Script) targetScript.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName() + 0,
                                 ((Script) targetScript.getASTNode()).getStmtList().getStmts().get(0))));
                     } else {
                         edit.addAddition(new Edit(new Label("Script", null), new Label(
