@@ -5,8 +5,8 @@ import de.uni_passau.fim.se2.litterbox.ast.model.ASTNode;
 import java.util.Objects;
 
 public class Label {
-    private String label;
-    private ASTNode node;
+    private final String label;
+    private final ASTNode node;
 
     public Label(String label, ASTNode node) {
         this.label = label;

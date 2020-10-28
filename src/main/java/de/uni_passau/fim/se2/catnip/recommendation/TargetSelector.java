@@ -24,7 +24,7 @@ public class TargetSelector {
         CSVReader reader = new CSVReader(new FileReader(path));
         List<String[]> myEntries = reader.readAll();
 
-        List<String> suitableCSV = new ArrayList<>();
+        List<String> suitableProjects = new ArrayList<>();
         for (String[] currentEntry : myEntries) {
             //format of csv after converting taps with taps to csv converter
             if (!currentEntry[0].equals("projektname")) {
@@ -32,9 +32,18 @@ public class TargetSelector {
                 String error = currentEntry[currentEntry.length - 2];
                 String failed = currentEntry[currentEntry.length - 3];
                 String passed = currentEntry[currentEntry.length - 4];
-                //todo umwandeln
+
+                double coverageNumber = Double.parseDouble(coverage);
+                int errorNumber = Integer.parseInt(error);
+                int failedNumber = Integer.parseInt(failed);
+                int passedNumber = Integer.parseInt(passed);
+                int numberOfTests = errorNumber + failedNumber + passedNumber;
+
+                if ((double) passedNumber / (double) numberOfTests >= currentPercentage) {
+                    suitableProjects.add(currentEntry[0]);
+                }
             }
         }
-        return suitableCSV;
+        return suitableProjects;
     }
 }
