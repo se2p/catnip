@@ -1,6 +1,10 @@
 package de.uni_passau.fim.se2.catnip;
 
+import com.opencsv.exceptions.CsvException;
+import de.uni_passau.fim.se2.catnip.recommendation.HintGenerationTool;
 import org.apache.commons.cli.*;
+
+import java.io.IOException;
 
 public class Main {
     private static final String SOURCE_PATH = "path";
@@ -25,8 +29,15 @@ public class Main {
             CommandLine cmd = parser.parse(options, args);
 
             if (cmd.hasOption(SOURCE_PATH) && cmd.hasOption(TARGET_PATH) && cmd.hasOption(CSV_PATH)) {
+                HintGenerationTool hintGenerationTool;
+                if (cmd.hasOption(MINIMUM_PERCENTAGE)) {
+                    double percentage = Double.parseDouble(cmd.getOptionValue(MINIMUM_PERCENTAGE));
+                    hintGenerationTool = new HintGenerationTool(cmd.getOptionValue(SOURCE_PATH), cmd.getOptionValue(TARGET_PATH), cmd.getOptionValue(CSV_PATH), percentage);
+                } else {
+                    hintGenerationTool = new HintGenerationTool(cmd.getOptionValue(SOURCE_PATH), cmd.getOptionValue(TARGET_PATH), cmd.getOptionValue(CSV_PATH));
+                }
 
-
+                hintGenerationTool.generateHints();
                 return;
             }
             printHelp();
@@ -36,14 +47,14 @@ public class Main {
         }
     }
 
-    static void printHelp() {
+    private static void printHelp() {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("Catnip", getCommandLineOptions(), true);
         System.out.println("Example: " + "java -jar Catnip.jar -path "
                 + "C:\\scratchprojects\\files\\mySolution.sb3 -target C:\\scratchprojects\\sampleSolutions -csv -folder C:\\scratchprojects\\sampleSolutions\\results.csv -m 80");
     }
 
-    static Options getCommandLineOptions() {
+    private static Options getCommandLineOptions() {
         Options options = new Options();
 
         options.addOption(SOURCE_PATH_SHORT, SOURCE_PATH, true, "file path (required)");
