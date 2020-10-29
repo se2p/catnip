@@ -19,7 +19,11 @@ public class HintGenerationTool {
 
     public HintGenerationTool(String sourcePath, String targetPath, String csvPath, double minPercentage) {
         this.sourcePath = sourcePath;
-        this.targetPath = targetPath;
+        if (targetPath.endsWith(File.separator)) {
+            this.targetPath = targetPath;
+        } else {
+            this.targetPath = targetPath + File.separator;
+        }
         this.csvPath = csvPath;
         targetSelector = new TargetSelector(minPercentage);
         parser = new Scratch3Parser();
@@ -27,19 +31,24 @@ public class HintGenerationTool {
 
     public HintGenerationTool(String sourcePath, String targetPath, String csvPath) {
         this.sourcePath = sourcePath;
-        this.targetPath = targetPath;
+        if (targetPath.endsWith(File.separator)) {
+            this.targetPath = targetPath;
+        } else {
+            this.targetPath = targetPath + File.separator;
+        }
         this.csvPath = csvPath;
         targetSelector = new TargetSelector();
         parser = new Scratch3Parser();
     }
 
-    public void generateHints() {
+    public List<Recommendation> generateHints() {
         try {
             Program sourceProgram = parser.parseFile(sourcePath);
             List<Program> targetPrograms = parseTargets();
             RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
             List<Recommendation> recommendations = recommendationGenerator.generateHints(sourceProgram, targetPrograms);
             //Todo
+            return recommendations;
         } catch (IOException | CsvException e) {
             e.printStackTrace();
         } catch (ParsingException e) {
@@ -47,14 +56,29 @@ public class HintGenerationTool {
         } catch (ImpossibleEditException e) {
             System.err.println("Something went wrong while generating Edits.");
         }
+        return null;
     }
 
     private List<Program> parseTargets() throws IOException, CsvException, ParsingException {
         List<String> suitableTargets = targetSelector.getViableTargetNames(csvPath);
-        File file = new File(targetPath);
         List<Program> targets = new ArrayList<>();
         for (String targetName : suitableTargets) {
-            targets.add(parser.parseFile(file.getPath() + targetName));
+            File project;
+            if (targetName.endsWith(".sb3") || targetName.endsWith(".json")) {
+                targets.add(parser.parseFile(targetPath + targetName));
+            } else {
+                project = new File(targetPath  + targetName + ".sb3");
+                if (project.exists()) {
+                    targets.add(parser.parseFile(project));
+                } else {
+                    project = new File(targetPath  + targetName + ".json");
+                    if (project.exists()) {
+                        targets.add(parser.parseFile(project));
+                    } else {
+                        System.err.println("No suitable file with name " + targetName + " exists in folder " + targetPath);
+                    }
+                }
+            }
         }
         return targets;
     }
