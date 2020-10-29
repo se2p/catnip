@@ -1,0 +1,9 @@
+projektname,initialize boat,initialize gate,initialize shark,gate spinning,boat moving up,boat crashing,boat moving right,boat moving left,boat moving down,boat touching arrow,boat touching slime,shark moving,shark speaking,shark costume,passed,failed,error,coverage
+5f042d99df0b6_Bootsrennen_Fertig,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,fail,pass,pass,13,1,0,0.93
+5f043f15e6880_Bootsrennen-fertig-3,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,fail,pass,pass,13,1,0,0.94
+5f044aaec0e60_Bootsrennen-1-2,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,fail,pass,fail,12,2,0,0.96
+5f044d5d031cc_Bootsrennen-2-2,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,fail,pass,fail,12,2,0,0.95
+5f04b2e9449ae_BootsrennenFertig-11,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,14,0,0,0.93
+5f05a5ddd1fc0_Bootsrennen-2-4,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,14,0,0,0.93
+5f05a8c027065_1-Aufgabe,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,14,0,0,0.93
+5f05bbb675bb3_Bootsrennen-fertig-1-1,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,14,0,0,0.91

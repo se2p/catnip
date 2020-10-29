@@ -13,7 +13,7 @@ public class TargetSelector {
     private double currentPercentage;
 
     public TargetSelector(double minPercentage) {
-        currentPercentage = minPercentage;
+        currentPercentage = minPercentage / 100;
     }
 
     public TargetSelector() {
@@ -39,7 +39,8 @@ public class TargetSelector {
                 int passedNumber = Integer.parseInt(passed);
                 int numberOfTests = errorNumber + failedNumber + passedNumber;
 
-                if ((double) passedNumber / (double) numberOfTests >= currentPercentage) {
+                double percentagePassed = (double) passedNumber / (double) numberOfTests;
+                if (percentagePassed >= currentPercentage) {
                     suitableProjects.add(currentEntry[0]);
                 }
             }
