@@ -41,14 +41,13 @@ public class HintGenerationTool {
         parser = new Scratch3Parser();
     }
 
-    public List<Recommendation> generateHints() {
+    public Hint generateHints() {
         try {
             Program sourceProgram = parser.parseFile(sourcePath);
             List<Program> targetPrograms = parseTargets();
             RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
             List<Recommendation> recommendations = recommendationGenerator.generateHints(sourceProgram, targetPrograms);
-            //Todo
-            return recommendations;
+            return new Hint(sourceProgram, recommendations);
         } catch (IOException | CsvException e) {
             e.printStackTrace();
         } catch (ParsingException e) {
