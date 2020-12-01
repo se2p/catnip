@@ -1,10 +1,12 @@
 package de.uni_passau.fim.se2.catnip;
 
-import com.opencsv.exceptions.CsvException;
+import de.uni_passau.fim.se2.catnip.recommendation.Hint;
 import de.uni_passau.fim.se2.catnip.recommendation.HintGenerationTool;
+import de.uni_passau.fim.se2.catnip.recommendation.Recommendation;
+import de.uni_passau.fim.se2.catnip.util.CSVWriter;
 import org.apache.commons.cli.*;
 
-import java.io.IOException;
+import java.util.List;
 
 public class Main {
     private static final String SOURCE_PATH = "path";
@@ -13,6 +15,8 @@ public class Main {
     private static final String TARGET_PATH_SHORT = "t";
     private static final String CSV_PATH = "csv";
     private static final String CSV_PATH_SHORT = "c";
+    private static final String OUTPUT_PATH = "output";
+    private static final String OUTPUT_PATH_SHORT = "o";
     private static final String HELP = "help";
     private static final String HELP_SHORT = "h";
     private static final String MINIMUM_PERCENTAGE = "minpercentage";
@@ -28,7 +32,7 @@ public class Main {
         try {
             CommandLine cmd = parser.parse(options, args);
 
-            if (cmd.hasOption(SOURCE_PATH) && cmd.hasOption(TARGET_PATH) && cmd.hasOption(CSV_PATH)) {
+            if (cmd.hasOption(SOURCE_PATH) && cmd.hasOption(TARGET_PATH) && cmd.hasOption(CSV_PATH) && cmd.hasOption(OUTPUT_PATH)) {
                 HintGenerationTool hintGenerationTool;
                 if (cmd.hasOption(MINIMUM_PERCENTAGE)) {
                     double percentage = Double.parseDouble(cmd.getOptionValue(MINIMUM_PERCENTAGE));
@@ -37,7 +41,8 @@ public class Main {
                     hintGenerationTool = new HintGenerationTool(cmd.getOptionValue(SOURCE_PATH), cmd.getOptionValue(TARGET_PATH), cmd.getOptionValue(CSV_PATH));
                 }
 
-                hintGenerationTool.generateHints();
+                Hint hint = hintGenerationTool.generateHints();
+                CSVWriter.printHints(cmd.getOptionValue(OUTPUT_PATH), hint);
                 return;
             }
             printHelp();
@@ -51,7 +56,7 @@ public class Main {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("Catnip", getCommandLineOptions(), true);
         System.out.println("Example: " + "java -jar Catnip.jar -path "
-                + "C:\\scratchprojects\\files\\mySolution.sb3 -target C:\\scratchprojects\\sampleSolutions -csv -folder C:\\scratchprojects\\sampleSolutions\\results.csv -m 80");
+                + "C:\\scratchprojects\\files\\mySolution.sb3 -target C:\\scratchprojects\\sampleSolutions -csv C:\\scratchprojects\\sampleSolutions\\results.csv -output C:\\scratchprojects\\files\\mySolution_hints.csv  -m 80");
     }
 
     private static Options getCommandLineOptions() {
@@ -59,7 +64,8 @@ public class Main {
 
         options.addOption(SOURCE_PATH_SHORT, SOURCE_PATH, true, "file path (required)");
         options.addOption(TARGET_PATH_SHORT, TARGET_PATH, true, "folder path to sample solutions (required)");
-        options.addOption(CSV_PATH_SHORT, CSV_PATH, true, "path to sample csv file (required)");
+        options.addOption(CSV_PATH_SHORT, CSV_PATH, true, "path to csv file containing WHISKER results (required)");
+        options.addOption(OUTPUT_PATH_SHORT, OUTPUT_PATH, true, "output path to csv file with hints created (required)");
         options.addOption(MINIMUM_PERCENTAGE_SHORT, MINIMUM_PERCENTAGE, true, "minimum percentage of successful tests a target needs to be considered (default 90)");
         options.addOption(HELP_SHORT, HELP, false, "print this message");
 
