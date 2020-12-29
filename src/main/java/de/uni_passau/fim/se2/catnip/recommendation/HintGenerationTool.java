@@ -4,6 +4,7 @@ import com.opencsv.exceptions.CsvException;
 import de.uni_passau.fim.se2.litterbox.ast.ParsingException;
 import de.uni_passau.fim.se2.litterbox.ast.model.Program;
 import de.uni_passau.fim.se2.litterbox.ast.parser.Scratch3Parser;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class HintGenerationTool {
     private final String sourcePath;
     private final String targetPath;
     private final String csvPath;
+    ;
     private TargetSelector targetSelector;
 
     public HintGenerationTool(String sourcePath, String targetPath, String csvPath, double minPercentage) {
@@ -44,7 +46,7 @@ public class HintGenerationTool {
     public Hint generateHints() {
         try {
             Program sourceProgram = parser.parseFile(sourcePath);
-            List<Program> targetPrograms = parseTargets();
+            List<Program> targetPrograms = getTargets();
             RecommendationGenerator recommendationGenerator = new RecommendationGenerator();
             List<Recommendation> recommendations = recommendationGenerator.generateHints(sourceProgram, targetPrograms);
             return new Hint(sourceProgram, recommendations);
@@ -58,19 +60,21 @@ public class HintGenerationTool {
         return null;
     }
 
-    private List<Program> parseTargets() throws IOException, CsvException, ParsingException {
-        List<String> suitableTargets = targetSelector.getViableTargetNames(csvPath);
+    private List<Program> getTargets() throws IOException, CsvException, ParsingException {
+        File sourceProject = new File(sourcePath);
+        String sourceName = FilenameUtils.removeExtension(sourceProject.getName());
+        List<String> suitableTargets = targetSelector.getViableTargetNames(csvPath, sourceName);
         List<Program> targets = new ArrayList<>();
         for (String targetName : suitableTargets) {
             File project;
             if (targetName.endsWith(".sb3") || targetName.endsWith(".json")) {
                 targets.add(parser.parseFile(targetPath + targetName));
             } else {
-                project = new File(targetPath  + targetName + ".sb3");
+                project = new File(targetPath + targetName + ".sb3");
                 if (project.exists()) {
                     targets.add(parser.parseFile(project));
                 } else {
-                    project = new File(targetPath  + targetName + ".json");
+                    project = new File(targetPath + targetName + ".json");
                     if (project.exists()) {
                         targets.add(parser.parseFile(project));
                     } else {
