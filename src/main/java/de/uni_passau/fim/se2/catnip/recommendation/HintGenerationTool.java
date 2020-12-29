@@ -16,7 +16,7 @@ public class HintGenerationTool {
     private final String sourcePath;
     private final String targetPath;
     private final String csvPath;
-    ;
+
     private TargetSelector targetSelector;
 
     public HintGenerationTool(String sourcePath, String targetPath, String csvPath, double minPercentage) {
