@@ -25,19 +25,39 @@ public class TargetSelector {
         List<String[]> myEntries = reader.readAll();
 
         List<String> suitableProjects = new ArrayList<>();
+        boolean hasSkip = false;
         for (String[] currentEntry : myEntries) {
             //format of csv after converting taps with taps to csv converter
+            if (currentEntry[0].equals("projektname") || currentEntry[0].equals("projectname")) {
+                if (currentEntry[currentEntry.length - 2].equals("skip")) {
+                    hasSkip = true;
+                }
+            }
             if (!currentEntry[0].equals("projektname") && !currentEntry[0].equals("projectname") && !currentEntry[0].equals(sourceName)) {
-                String coverage = currentEntry[currentEntry.length - 1];
-                String error = currentEntry[currentEntry.length - 2];
-                String failed = currentEntry[currentEntry.length - 3];
-                String passed = currentEntry[currentEntry.length - 4];
+                String coverage;
+                String error;
+                String failed;
+                String passed;
+                String skip = "0";
+
+                coverage = currentEntry[currentEntry.length - 1];
+                if (hasSkip) {
+                    skip = currentEntry[currentEntry.length - 2];
+                    error = currentEntry[currentEntry.length - 3];
+                    failed = currentEntry[currentEntry.length - 4];
+                    passed = currentEntry[currentEntry.length - 5];
+                } else {
+                    error = currentEntry[currentEntry.length - 2];
+                    failed = currentEntry[currentEntry.length - 3];
+                    passed = currentEntry[currentEntry.length - 4];
+                }
 
                 double coverageNumber = Double.parseDouble(coverage);
                 int errorNumber = Integer.parseInt(error);
                 int failedNumber = Integer.parseInt(failed);
                 int passedNumber = Integer.parseInt(passed);
-                int numberOfTests = errorNumber + failedNumber + passedNumber;
+                int skipNumber = Integer.parseInt(skip);
+                int numberOfTests = errorNumber + failedNumber + passedNumber + skipNumber;
 
                 double percentagePassed = (double) passedNumber / (double) numberOfTests;
                 if (percentagePassed >= currentPercentage) {
