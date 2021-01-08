@@ -33,6 +33,6 @@ public class HintGenerationToolTest {
         next.add(new Label("GoToPos0", null));
         next.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(next, rec.getFollowingNodes());
-        Assertions.assertEquals(new Label("StmtList", null), rec.getParentNode());
+        Assertions.assertEquals(new Label("StmtList0", null), rec.getParentNode());
     }
 }
