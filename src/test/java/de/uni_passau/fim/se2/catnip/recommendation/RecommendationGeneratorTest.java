@@ -42,7 +42,7 @@ public class RecommendationGeneratorTest {
         next.add(new Label("GoToPos0", null));
         next.add(new Label(PQGramProfileCreator.NULL_NODE, null));
         Assertions.assertEquals(next, recommendations.get(0).getFollowingNodes());
-        Assertions.assertEquals(new Label("StmtList", null), recommendations.get(0).getParentNode());
+        Assertions.assertEquals(new Label("StmtList0", null), recommendations.get(0).getParentNode());
     }
 
     @Test
