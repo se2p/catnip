@@ -34,6 +34,7 @@ public abstract class CSVWriter {
 
     private static List<String> generateOutputFromHint(Recommendation hint, Program program) {
         List<String> hintAsList = new ArrayList<>();
+        hintAsList.add(program.getIdent().getName());
         hintAsList.add(hint.getActor().getIdent().getName());
         ScratchBlocksVisitor visitor = new ScratchBlocksVisitor();
         visitor.setProgram(program);
@@ -69,6 +70,7 @@ public abstract class CSVWriter {
 
     protected static CSVPrinter getNewPrinter(String name) throws IOException {
         List<String> headers = new ArrayList<>();
+        headers.add("project_name");
         headers.add("actor_name");
         headers.add("script/procedure");
         headers.add("affected_block");

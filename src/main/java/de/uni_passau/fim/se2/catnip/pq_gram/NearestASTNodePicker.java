@@ -64,11 +64,21 @@ public abstract class NearestASTNodePicker {
     }
 
     public static ActorWithProfile pickNearestActor(ActorDefinition source, List<ActorDefinition> targets) {
+        for (ActorDefinition target : targets) {
+            if (target.getIdent().getName().equals(source.getIdent().getName())) {
+                return new ActorWithProfile(target);
+            }
+        }
         ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
         return new ActorWithProfile((ActorDefinition) astNode.getASTNode(), astNode.getProfile());
     }
 
     public static ActorWithProfile pickNearestActor(ActorWithProfile source, List<ActorWithProfile> targets) {
+        for (ActorWithProfile target : targets) {
+            if (((ActorDefinition) target.getASTNode()).getIdent().getName().equals(((ActorDefinition) source.getASTNode()).getIdent().getName())) {
+                return new ActorWithProfile((ActorDefinition) target.getASTNode(), target.getProfile());
+            }
+        }
         ASTNodeWithProfile astNode = pickNearestASTNode(source, targets);
         return new ActorWithProfile((ActorDefinition) astNode.getASTNode(), astNode.getProfile());
     }

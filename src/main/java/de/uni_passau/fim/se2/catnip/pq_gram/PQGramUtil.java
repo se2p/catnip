@@ -47,7 +47,7 @@ public abstract class PQGramUtil {
 
         for (LabelTuple tuple : missingTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (!tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal")
+                if (!tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal") && !tuple.getLabels().get(i).getLabel().contains("StrId")
                         && intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     editSet.addAddition(new Edit(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
@@ -61,7 +61,7 @@ public abstract class PQGramUtil {
                     current = rightSiblings.get(0);
                     rightSiblings.remove(0);
                 }
-                if (!tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal")
+                if (!tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal") && !tuple.getLabels().get(i).getLabel().contains("StrId")
                         && intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     editSet.addAddition(new Edit(tuple.getLabels().get(PQGramProfileCreator.getP() - 1),
                             tuple.getLabels().get(i), new ArrayList<>(leftSiblings), new ArrayList<>(rightSiblings)));
@@ -74,7 +74,7 @@ public abstract class PQGramUtil {
 
         for (LabelTuple tuple : extraTuples) {
             for (int i = 1; i < PQGramProfileCreator.getP(); i++) {
-                if (!tuple.getLabels().get(i).getLabel().contains("Metadata")
+                if (!tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal") && !tuple.getLabels().get(i).getLabel().contains("StrId")
                         && intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     editSet.addDeletion(new Edit(tuple.getLabels().get(i - 1), tuple.getLabels().get(i)));
                 }
@@ -88,7 +88,7 @@ public abstract class PQGramUtil {
                     current = rightSiblings.get(0);
                     rightSiblings.remove(0);
                 }
-                if (!tuple.getLabels().get(i).getLabel().contains("Metadata")
+                if (!tuple.getLabels().get(i).getLabel().contains("Metadata") && !tuple.getLabels().get(i).getLabel().contains("Literal") && !tuple.getLabels().get(i).getLabel().contains("StrId")
                         && intersectionNotContainsLabel(intersection, tuple.getLabels().get(i))) {
                     editSet.addDeletion(new Edit(tuple.getLabels().get(PQGramProfileCreator.getP() - 1),
                             tuple.getLabels().get(i), new ArrayList<>(leftSiblings), new ArrayList<>(rightSiblings)));
