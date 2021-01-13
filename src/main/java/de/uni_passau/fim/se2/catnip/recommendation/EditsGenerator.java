@@ -67,8 +67,9 @@ public class EditsGenerator {
                         sourceScriptsNew.remove(sourceScript);
                     }
                     assert sourceScriptsNew.size() > 0;
-                    EditSet edit = new EditSet();
+
                     for (ScriptWithProfile script : sourceScriptsNew) {
+                        EditSet edit = new EditSet();
                         if (((Script) script.getASTNode()).getEvent() instanceof Never) {
                             edit.addDeletion(new Edit(new Label("Script", null), new Label(
                                     ((Script) script.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName() + 0,
@@ -97,9 +98,9 @@ public class EditsGenerator {
                     targetScriptsWithProfile.remove(targetScript);
                 }
 
-                if (sourceScriptsWithProfile.size() < targetScriptsWithProfile.size()) {
-                    EditSet edit = new EditSet();
+                if (sourceScriptsWithProfile.size() <= targetScriptsWithProfile.size()) {
                     for (ScriptWithProfile targetScript : targetScriptsWithProfile) {
+                        EditSet edit = new EditSet();
                         if (((Script) targetScript.getASTNode()).getEvent() instanceof Never) {
                             edit.addAddition(new Edit(new Label("Script", null), new Label(
                                     ((Script) targetScript.getASTNode()).getStmtList().getStmts().get(0).getClass().getSimpleName() + 0,
@@ -109,8 +110,8 @@ public class EditsGenerator {
                                     ((Script) targetScript.getASTNode()).getEvent().getClass().getSimpleName(),
                                     ((Script) targetScript.getASTNode()).getEvent())));
                         }
+                        edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), new EmptyScript(), edit));
                     }
-                    edits.add(new ActorScriptEdit((ActorDefinition) currentSourceActor.getASTNode(), new EmptyScript(), edit));
                 }
 
                 List<ProcedureDefinition> sourceProcedures =
