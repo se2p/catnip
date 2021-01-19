@@ -98,7 +98,7 @@ public class EditsGenerator {
                     targetScriptsWithProfile.remove(targetScript);
                 }
 
-                if (sourceScriptsWithProfile.size() <= targetScriptsWithProfile.size()) {
+                if (targetScriptsWithProfile.size() > 0) {
                     for (ScriptWithProfile targetScript : targetScriptsWithProfile) {
                         EditSet edit = new EditSet();
                         if (((Script) targetScript.getASTNode()).getEvent() instanceof Never) {
