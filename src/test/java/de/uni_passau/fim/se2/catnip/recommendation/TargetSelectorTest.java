@@ -13,7 +13,7 @@ public class TargetSelectorTest {
     @Test
     public void test100Percent() throws IOException, CsvException {
         TargetSelector targetSelector = new TargetSelector(100);
-        List<String> targets = targetSelector.getViableTargetNames("./src/test/fixtures/testWhiskerResults.csv", "someSourceName");
+        List<String> targets = targetSelector.getViableTargetNamesByPercentage("./src/test/fixtures/testWhiskerResults.csv", "someSourceName");
         Assertions.assertEquals(4, targets.size());
         List<String> allTargets = new ArrayList<>();
         allTargets.add("5f04b2e9449ae_BootsrennenFertig-11");
@@ -26,8 +26,8 @@ public class TargetSelectorTest {
     @Test
     public void testStandardPercent() throws IOException, CsvException {
         TargetSelector targetSelector = new TargetSelector();
-        List<String> targets = targetSelector.getViableTargetNames("./src/test/fixtures/testWhiskerResults.csv", "someSourceName");
-        Assertions.assertEquals(6, targets.size());
+        List<String> targets = targetSelector.getViableTargetNamesByPercentage("./src/test/fixtures/testWhiskerResults.csv", "someSourceName");
+        Assertions.assertEquals(7, targets.size());
         List<String> allTargets = new ArrayList<>();
         allTargets.add("5f042d99df0b6_Bootsrennen_Fertig");
         allTargets.add("5f043f15e6880_Bootsrennen-fertig-3");
@@ -35,6 +35,28 @@ public class TargetSelectorTest {
         allTargets.add("5f05a5ddd1fc0_Bootsrennen-2-4");
         allTargets.add("5f05a8c027065_1-Aufgabe");
         allTargets.add("5f05bbb675bb3_Bootsrennen-fertig-1-1");
+        allTargets.add("5f044d5d031cc_Bootsrennen-2-3");
         Assertions.assertEquals(allTargets, targets);
+    }
+
+    @Test
+    public void testIndividual() throws IOException, CsvException {
+        TargetSelector targetSelector = new TargetSelector();
+        List<String> targets = targetSelector.getViableTargetNamesIndividualBetter("./src/test/fixtures/testWhiskerResults.csv", "5f043f15e6880_Bootsrennen-fertig-3");
+        Assertions.assertEquals(4, targets.size());
+        List<String> allTargets = new ArrayList<>();
+        allTargets.add("5f04b2e9449ae_BootsrennenFertig-11");
+        allTargets.add("5f05a5ddd1fc0_Bootsrennen-2-4");
+        allTargets.add("5f05a8c027065_1-Aufgabe");
+        allTargets.add("5f05bbb675bb3_Bootsrennen-fertig-1-1");
+        Assertions.assertEquals(allTargets, targets);
+    }
+
+    @Test
+    public void testIndividualOther() throws IOException, CsvException {
+        TargetSelector targetSelector = new TargetSelector();
+        List<String> targets = targetSelector.getViableTargetNamesIndividualBetter("./src/test/fixtures/testWhiskerResults.csv", "5f044d5d031cc_Bootsrennen-2-2");
+        Assertions.assertFalse(targets.contains("5f044d5d031cc_Bootsrennen-2-3"));
+        Assertions.assertEquals(6, targets.size());
     }
 }
