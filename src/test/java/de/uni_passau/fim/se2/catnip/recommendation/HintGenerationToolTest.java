@@ -18,7 +18,7 @@ public class HintGenerationToolTest {
         String sourcePath = "./src/test/fixtures/oneBlockDifferenceSource.json";
         String targetPath = "./src/test/fixtures";
         String csvPath = "./src/test/fixtures/hintGenerationResults.csv";
-        HintGenerationTool hintGenerationTool = new HintGenerationTool(sourcePath, targetPath, csvPath);
+        HintGenerationTool hintGenerationTool = new HintGenerationTool(sourcePath, targetPath, csvPath,false);
         List<Recommendation> recommendations = hintGenerationTool.generateHints().getRecommendations();
         Assertions.assertEquals(1, recommendations.size());
         Recommendation rec = recommendations.get(0);

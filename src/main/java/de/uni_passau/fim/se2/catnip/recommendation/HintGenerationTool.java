@@ -16,10 +16,11 @@ public class HintGenerationTool {
     private final String sourcePath;
     private final String targetPath;
     private final String csvPath;
+    private boolean individual;
 
     private TargetSelector targetSelector;
 
-    public HintGenerationTool(String sourcePath, String targetPath, String csvPath, double minPercentage) {
+    public HintGenerationTool(String sourcePath, String targetPath, String csvPath, boolean individual, double minPercentage) {
         this.sourcePath = sourcePath;
         if (targetPath.endsWith(File.separator)) {
             this.targetPath = targetPath;
@@ -29,9 +30,10 @@ public class HintGenerationTool {
         this.csvPath = csvPath;
         targetSelector = new TargetSelector(minPercentage);
         parser = new Scratch3Parser();
+        this.individual=individual;
     }
 
-    public HintGenerationTool(String sourcePath, String targetPath, String csvPath) {
+    public HintGenerationTool(String sourcePath, String targetPath, String csvPath, boolean individual) {
         this.sourcePath = sourcePath;
         if (targetPath.endsWith(File.separator)) {
             this.targetPath = targetPath;
@@ -41,6 +43,7 @@ public class HintGenerationTool {
         this.csvPath = csvPath;
         targetSelector = new TargetSelector();
         parser = new Scratch3Parser();
+        this.individual=individual;
     }
 
     public Hint generateHints() {
@@ -63,7 +66,12 @@ public class HintGenerationTool {
     private List<Program> getTargets() throws IOException, CsvException, ParsingException {
         File sourceProject = new File(sourcePath);
         String sourceName = FilenameUtils.removeExtension(sourceProject.getName());
-        List<String> suitableTargets = targetSelector.getViableTargetNames(csvPath, sourceName);
+        List<String> suitableTargets;
+        if (individual){
+            suitableTargets = targetSelector.getViableTargetNamesIndividualBetter(csvPath,sourceName);
+        }else{
+            suitableTargets  = targetSelector.getViableTargetNamesByPercentage(csvPath, sourceName);
+        }
         List<Program> targets = new ArrayList<>();
         for (String targetName : suitableTargets) {
             File project;

@@ -2,11 +2,8 @@ package de.uni_passau.fim.se2.catnip;
 
 import de.uni_passau.fim.se2.catnip.recommendation.Hint;
 import de.uni_passau.fim.se2.catnip.recommendation.HintGenerationTool;
-import de.uni_passau.fim.se2.catnip.recommendation.Recommendation;
 import de.uni_passau.fim.se2.catnip.util.CSVWriter;
 import org.apache.commons.cli.*;
-
-import java.util.List;
 
 public class Main {
     private static final String SOURCE_PATH = "path";
@@ -21,6 +18,8 @@ public class Main {
     private static final String HELP_SHORT = "h";
     private static final String MINIMUM_PERCENTAGE = "minpercentage";
     private static final String MINIMUM_PERCENTAGE_SHORT = "m";
+    private static final String INDIVIDUAL_BETTER = "individual";
+    private static final String INDIVIDUAL_BETTER_SHORT = "i";
 
     private Main() {
     }
@@ -34,11 +33,15 @@ public class Main {
 
             if (cmd.hasOption(SOURCE_PATH) && cmd.hasOption(TARGET_PATH) && cmd.hasOption(CSV_PATH) && cmd.hasOption(OUTPUT_PATH)) {
                 HintGenerationTool hintGenerationTool;
+                boolean individual = false;
+                if (cmd.hasOption(INDIVIDUAL_BETTER)) {
+                    individual = true;
+                }
                 if (cmd.hasOption(MINIMUM_PERCENTAGE)) {
                     double percentage = Double.parseDouble(cmd.getOptionValue(MINIMUM_PERCENTAGE));
-                    hintGenerationTool = new HintGenerationTool(cmd.getOptionValue(SOURCE_PATH), cmd.getOptionValue(TARGET_PATH), cmd.getOptionValue(CSV_PATH), percentage);
+                    hintGenerationTool = new HintGenerationTool(cmd.getOptionValue(SOURCE_PATH), cmd.getOptionValue(TARGET_PATH), cmd.getOptionValue(CSV_PATH), individual, percentage);
                 } else {
-                    hintGenerationTool = new HintGenerationTool(cmd.getOptionValue(SOURCE_PATH), cmd.getOptionValue(TARGET_PATH), cmd.getOptionValue(CSV_PATH));
+                    hintGenerationTool = new HintGenerationTool(cmd.getOptionValue(SOURCE_PATH), cmd.getOptionValue(TARGET_PATH), cmd.getOptionValue(CSV_PATH), individual);
                 }
 
                 Hint hint = hintGenerationTool.generateHints();
@@ -67,6 +70,7 @@ public class Main {
         options.addOption(CSV_PATH_SHORT, CSV_PATH, true, "path to csv file containing WHISKER results (required)");
         options.addOption(OUTPUT_PATH_SHORT, OUTPUT_PATH, true, "output path to csv file with hints created (required)");
         options.addOption(MINIMUM_PERCENTAGE_SHORT, MINIMUM_PERCENTAGE, true, "minimum percentage of successful tests a target needs to be considered (default 90)");
+        options.addOption(INDIVIDUAL_BETTER_SHORT, INDIVIDUAL_BETTER, false, "individually better projects are chosen as possible targets");
         options.addOption(HELP_SHORT, HELP, false, "print this message");
 
         return options;
