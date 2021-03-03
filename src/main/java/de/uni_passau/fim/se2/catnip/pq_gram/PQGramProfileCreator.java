@@ -11,11 +11,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PQGramProfileCreator {
+public final class PQGramProfileCreator {
     private static int p = 2;
     private static int q = 3;
     public static final String NULL_NODE = "*";
     private static Map<String, Integer> countPerLabel;
+
+    private PQGramProfileCreator() {
+
+    }
 
     public static PQGramProfile createPQProfile(ASTNode node) {
         PQGramProfile profile = new PQGramProfile();

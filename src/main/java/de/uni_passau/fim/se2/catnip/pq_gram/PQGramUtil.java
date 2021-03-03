@@ -13,28 +13,14 @@ import java.util.Set;
 public abstract class PQGramUtil {
 
     public static double calculateDistance(PQGramProfile profile1, PQGramProfile profile2) {
+        if (profile1.getTuples().isEmpty() && profile2.getTuples().isEmpty()) {
+            return 0;
+        }
         Bag<LabelTuple> intersection = new HashBag<>(profile1.getTuples());
         intersection.retainAll(profile2.getTuples());
         double division = (double) intersection.size() / (profile1.getTuples().size() + profile2.getTuples().size());
         return 1 - (2 * division);
     }
-
-    /*
-    public static Set<String> commonSubtrees(PQGramProfile profile1, PQGramProfile profile2) {
-        Set<LabelTuple> intersection = new LinkedHashSet<>(profile1.getTuples());
-        intersection.retainAll(profile2.getTuples());
-        Set<String> commonRoots = new LinkedHashSet<>();
-        for (LabelTuple labelTuple : intersection) {
-            List<String> currentTuple = labelTuple.getLabels();
-            commonRoots.add(currentTuple.get(0));
-            for (int i = 1; i < currentTuple.size(); i++) {
-                commonRoots.remove(currentTuple.get(i));
-            }
-        }
-        return commonRoots;
-    }
-
-     */
 
     public static EditSet identifyEdits(PQGramProfile source, PQGramProfile target) {
         EditSet editSet = new EditSet();
