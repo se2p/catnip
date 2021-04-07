@@ -35,7 +35,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CSVWriter {
+public final class CSVWriter {
 
     public static void printHints(String csvPath, Hint hint) {
         try {

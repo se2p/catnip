@@ -28,7 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class PQGramUtil {
+public final class PQGramUtil {
 
     public static double calculateDistance(PQGramProfile profile1, PQGramProfile profile2) {
         if (profile1.getTuples().isEmpty() && profile2.getTuples().isEmpty()) {
