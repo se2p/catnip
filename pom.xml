@@ -6,7 +6,7 @@
 
     <groupId>de.uni_passau.fim.se2</groupId>
     <artifactId>Catnip</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <build>
         <plugins>
             <plugin>
@@ -116,17 +116,8 @@
          <dependency>
              <groupId>com.github.se2p</groupId>
              <artifactId>Litterbox</artifactId>
-             <version>1.4</version>
+             <version>1.5</version>
          </dependency>
-        <!--
-       <dependency>
-           <groupId>de.uni_passau.fim.se2</groupId>
-           <artifactId>Litterbox</artifactId>
-           <version>1.4</version>
-           <scope>system</scope>
-           <systemPath>${basedir}/lib/Litterbox-1.4-SNAPSHOT.jar</systemPath>
-       </dependency>
-        -->
        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
