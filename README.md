@@ -29,11 +29,40 @@ java -jar Catnip-1.0.jar --help
 
 ### Basic usage
 
-Catnip computes hints for a Scratch project using a pool of solutions, [Whisker](https://github.com/se2p/whisker-main) results for this pool in form of a csv file and a correctness threshold. Catnip is invoked as follows:
+Catnip computes hints for a Scratch project using the project in question, a pool of solutions and [Whisker](https://github.com/se2p/whisker-main) results for this pool in form of a csv file. Catnip is invoked as follows:
 
 ```
-java -jar Catnip-1.0.jar --path <path/to/project.sb3> --target <path/to/pool/folder> --csv <path/to/Whisker/result.csv> --output <path/to/hint.csv>  --minpercentage 80"
+java -jar Catnip-1.0.jar --path <path/to/project.sb3> --target <path/to/pool/folder> --csv <path/to/Whisker/result.csv> --output <path/to/hint.csv> 
 ```
 
 As a result, Catnip will report any hints in the csv file specified with the output parameter.
 
+### Correctness Specification
+
+The correctness that solutions in the pool have to fulfill to be selected in the hint generation process can be specified as well, otherwise 90% correctness is used:
+
+```
+java -jar Catnip-1.0.jar --path <path/to/project.sb3> --target <path/to/pool/folder> --csv <path/to/Whisker/result.csv> --output <path/to/hint.csv> --minpercentage 80
+```
+
+### Individual Results Method
+
+Catnip has an alternative method of selecting suitable solutions out of the pool. Here the individual results of the candidate have to pass the same tests as the current student program and at least one more test.
+
+```
+java -jar Catnip-1.0.jar --path <path/to/project.sb3> --target <path/to/pool/folder> --csv <path/to/Whisker/result.csv> --output <path/to/hint.csv> --individual
+```
+
+## Publications
+
+To learn more about Catnip and its hint generation technique, see the following paper:
+
+F. Obermüller, U. Heuer, and G. Fraser, “Guiding Next-Step Hint Generation Using Automated Tests”, in 
+26th ACM Conference on Innovation and Technology in Computer Science Education V. 1 (ITiCSE 2021), ACM, 2021.
+[https://doi.org/10.1145/3430665.3456344](https://doi.org/10.1145/3430665.3456344)
+
+
+## Contributors
+
+Gordon Fraser\
+Florian Obermüller
