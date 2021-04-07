@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class NearestASTNodePicker {
-    private static Random rand = new Random();
+public final class NearestASTNodePicker {
+    private static final Random rand = new Random();
 
     public static Program pickNearestProgram(Program source, List<ProgramWithProfile> targets) {
         PQGramProfile sourceProfile = PQGramProfileCreator.createPQProfile(source);
