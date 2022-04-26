@@ -1,0 +1,17 @@
+cff-version: '1.1.0'
+message: 'If you want to reference Catnip in your work, please cite this paper.'
+authors:
+  - family-names: 'Obermüller'
+    given-names: 'Florian'
+  - family-names: 'Heuer'
+    given-names: 'Ute'
+  - family-names: 'Fraser'
+    given-names: 'Gordon'
+doi: '10.1145/3430665.3456344'
+identifiers:
+  - type: 'doi'
+    value: '10.1145/3430665.3456344'
+  - type: 'url'
+    value: 'http://dx.doi.org/10.1145/3430665.3456344'
+title: 'Guiding Next-Step Hint Generation Using Automated Tests'
+url: 'http://dx.doi.org/10.1145/3430665.3456344'
