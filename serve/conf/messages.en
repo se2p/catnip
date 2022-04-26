@@ -1,0 +1,25 @@
+hints.genericActorName=Missing Actors
+
+hints.noMessageFound=No detailed explanation available.
+hints.deletionHint.explanation=Delete a node of type {0} as shown below.
+hints.deletionHint.type=Delete Block
+hints.insertionHint.explanation=Insert a statement of type {0} as statement {1}.
+hints.insertionHint.type=Insert Statement
+hints.insertInFieldHint.explanation=Insert a node of type {0} as child {1} as shown below.
+hints.insertInFieldHint.type=Insert New Block as Child
+hints.moveHint.remarkMoveFrom=Move the node from here.
+hints.moveHint.remarkMoveTo=Move the node to here.
+hints.moveToPosHint.explanation=Move the statement of type {0} into this statement list at position {1}.
+hints.moveToPosHint.type=Move Statement
+hints.moveInFieldHint.explanation=Move the node of type {0} into the new position as child into the field {1}.
+hints.moveInFieldHint.type=Move Block To a Different Position
+hints.reorderHint.explanation=Move the statement at position {0} to position {1}.
+hints.reorderHint.type=Move Statement within Statement List
+hints.replaceFieldHint.explanation=Replace the node in {0} by another node of type {1}.
+hints.replaceFieldHint.type=Replace Child
+hints.replaceStmtHint.explanation=Replace the statement of type {0} at position {2} by another node of type {1}.
+hints.replaceStmtHint.type=Replace Statement
+hints.missingActorHint.type=Missing Actor
+hints.missingActorHint.explanation=The program is missing an actor with name {0}.
+
+response.programAlreadyCorrect=No hints generated, program is already correct.

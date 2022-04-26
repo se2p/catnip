@@ -1,0 +1,6 @@
+[submodule "scratch-gui"]
+	path = scratch-gui
+	url = https://github.com/LLK/scratch-gui.git
+[submodule "whisker"]
+	path = whisker
+	url = https://github.com/se2p/whisker.git

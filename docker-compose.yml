@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  hintgen:
+    image: hintgen-serve:1.0.0
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./run_conf/application.conf:/application.conf:ro
+      - ./run_conf/tasks/:/tasks:ro
+      # - ./run_conf/solutions/tests.js:/tests.js:ro
+      # - ./whisker/:/whisker
+      - receivedSolutions:/receivedSolutions
+    command: -Dconfig.file=/application.conf -Dplay.http.secret.key=6hg9345hnz5f4367856f34789gbv2
+    networks:
+      hintgen:
+        ipv4_address: 172.18.0.2
+
+  gui:
+    image: scratch-gui:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./run_conf/server-info.txt:/usr/share/nginx/html/server-info.txt:ro
+    depends_on:
+      - hintgen
+    networks:
+      hintgen:
+        ipv4_address: 172.18.0.3
+
+volumes:
+  receivedSolutions:
+
+networks:
+  hintgen:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
+

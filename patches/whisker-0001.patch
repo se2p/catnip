@@ -1,0 +1,50 @@
+diff --git a/servant/package.json b/servant/package.json
+index 45c1d557..bb04cec2 100644
+--- a/servant/package.json
++++ b/servant/package.json
+@@ -10,6 +10,7 @@
+         "js-yaml": "^4.1.0",
+         "puppeteer": "10.2.0",
+         "rimraf": "3.0.2",
++        "uuid": "^8.3.2",
+         "whisker-web": "0.6.0",
+         "yaml": "^1.10.2"
+     },
+diff --git a/servant/servant.js b/servant/servant.js
+index 34b2edee..db326c14 100644
+--- a/servant/servant.js
++++ b/servant/servant.js
+@@ -13,9 +13,10 @@ const CoverageGenerator = require('../whisker-main/src/coverage/coverage');
+ const CSVConverter = require('./converter.js');
+ const {attachRandomInputsToTest, attachErrorWitnessReplayToTest} = require('./witness-util.js');
+ const path = require('path');
++const uuid = require('uuid');
+ 
+ const production = process.env.NODE_ENV === "production";
+-const tmpDir = './.tmpWorkingDir';
++const tmpDir = './.tmpWorkingDir/' + uuid.v4();
+ const start = Date.now();
+ const {
+     whiskerURL, scratchPath, testPath, modelPath, modelRepetition, modelDuration, modelCaseSensitive, errorWitnessPath,
+@@ -605,7 +606,7 @@ function prepareTestFiles (whiskerTestPath) {
+     if (fs.existsSync(tmpDir)) {
+         fs.rmdirSync(tmpDir, {recursive: true});
+     }
+-    fs.mkdirSync(tmpDir);
++    fs.mkdirSync(tmpDir, {recursive: true});
+ 
+     return testSourcesPerTab.map((testSources, index) => {
+         const path = `${tmpDir}/${basename(whiskerTestPath)}_${index + 1}.js`;
+diff --git a/yarn.lock b/yarn.lock
+index f889ac41..e7f084cd 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -10186,7 +10186,7 @@ uuid@^3.3.2, uuid@^3.3.3:
+   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
+   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+ 
+-"uuid@^3.4.0 || ^7.0.0 || ^8.0.0":
++"uuid@^3.4.0 || ^7.0.0 || ^8.0.0", uuid@^8.3.2:
+   version "8.3.2"
+   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

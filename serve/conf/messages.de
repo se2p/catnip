@@ -1,0 +1,25 @@
+hints.genericActorName=Fehlende Aktoren
+
+hints.noMessageFound=Keine Detailerklärung möglich.
+hints.deletionHint.explanation=Lösche den Knoten des Typs {0} wie im Bild dargestellt.
+hints.deletionHint.type=Lösche Block
+hints.insertionHint.explanation=Füge einen Block vom Typ {0} an Position {1} ein.
+hints.insertionHint.type=Block Einfügen
+hints.insertInFieldHint.explanation=Füge einen Block vom Typ {0} in den Block als {1} ein, so wie im Bild dargestellt.
+hints.insertInFieldHint.type=Ändere das Feld innerhalb eines Blocks
+hints.moveHint.remarkMoveFrom=Verschiebe den Block von hier.
+hints.moveHint.remarkMoveTo=Verschiebe den Block hierhin.
+hints.moveToPosHint.explanation=Verschiebe den Block vom Typ {0} in die markierte Blockliste an Position {1}.
+hints.moveToPosHint.type=Verschiebe den Block
+hints.moveInFieldHint.explanation=Verschiebe den Block vom Typ {0} an die markierte Stelle als Kind {1}.
+hints.moveInFieldHint.type=Verschiebe den Block an eine andere Stelle im Programm
+hints.reorderHint.explanation=Verschiebe den Block von Position {0} zu Position {1}.
+hints.reorderHint.type=Verschiebe den Block
+hints.replaceFieldHint.explanation=Ersetze den Kinderblock {0} durch einen andern vom Typ {1}.
+hints.replaceFieldHint.type=Ersetze Kind von Block
+hints.replaceStmtHint.explanation=Ersetze den Block vom Typ {0} an Position {2} durch einen anderen vom Typ {1}.
+hints.replaceStmtHint.type=Ersetze Block
+hints.missingActorHint.type=Fehlender Aktor
+hints.missingActorHint.explanation=Im Programm fehlt ein Aktor mit Name {0}.
+
+response.programAlreadyCorrect=Keine Hinweise wurden generiert. Das Programm scheint schon vollständig zu sein.
