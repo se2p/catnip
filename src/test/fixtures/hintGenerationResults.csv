@@ -1,2 +1,0 @@
-projektname,initialize boat,initialize gate,initialize shark,gate spinning,boat moving up,boat crashing,boat moving right,boat moving left,boat moving down,boat touching arrow,boat touching slime,shark moving,shark speaking,shark costume,passed,failed,error,coverage
-oneBlockDifferenceTarget,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,pass,fail,pass,pass,13,1,0,0.93
