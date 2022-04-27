@@ -8,7 +8,7 @@ and the [Didactics of Informatics][ddi] of the [University of Passau][uni-passau
 
 > This branch contains the version of Catnip as presented at ITiCSE 2022.
 > For our ITiCSE 2021 paper (c.f. [Publications](#publications)), see the
-> [branch `master`](https://github.com/se2p/catnip/tree/master).
+> [branch `previous_version`](https://github.com/se2p/catnip/tree/previous_version).
 
 > Checkout with `git clone --recursive` to clone the `scratch-gui` and `whisker`
 submodules.
@@ -84,11 +84,11 @@ To learn more about Catnip and its hint generation technique, see the following 
 - F. Obermüller, U. Heuer, and G. Fraser, “Guiding Next-Step Hint Generation Using Automated Tests”, in
   26th ACM Conference on Innovation and Technology in Computer Science Education V. 1 (ITiCSE 2021), ACM, 2021.
   https://doi.org/10.1145/3430665.3456344
-  - code available on [branch `master`](https://github.com/se2p/catnip/tree/master)
+  - code available on [branch `previous_version`](https://github.com/se2p/catnip/tree/previous_version)
 - B. Fein, F. Obermüller, and G. Fraser, “Catnip: An Automated Hint Generation Tool for Scratch”, in
   27th ACM Conference on Innovation and Technology in Computer Science Education V. 1 (ITiCSE 2022), ACM, 2022.
   https://doi.org/10.1145/3502718.3524820
-  - code available on [branch `iticse2022`](https://github.com/se2p/catnip/tree/iticse2022)
+  - code available on [branch `master`](https://github.com/se2p/catnip/tree/master)
 
 
 # Contributors
